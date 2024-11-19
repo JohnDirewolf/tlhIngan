@@ -1,0 +1,195 @@
+def verb_prefix_table_ref(tableWin):
+    C_H_BG_COLOR="green"
+    C_H_FG_COLOR="red"
+    R_H_BG_COLOR="grey"
+    R_H_FG_COLOR="blue"
+    CELL_BG_COLOR="lightgrey"
+    CELL_FG_COLOR="black"
+
+    # Column Names
+    lbl_col_title = tableWin.AddLabel("OBJECT", 0, 0)
+    lbl_col_title ["fg"] = C_H_BG_COLOR
+    lbl_col_title ["bg"] = C_H_FG_COLOR
+    lbl_col_none = tableWin.AddLabel("none", 0, 1)
+    lbl_col_none["fg"] = C_H_BG_COLOR
+    lbl_col_none["bg"] = C_H_FG_COLOR
+    lbl_col_me = tableWin.AddLabel("me", 0, 2)
+    lbl_col_me["fg"] = C_H_BG_COLOR
+    lbl_col_me["bg"] = C_H_FG_COLOR
+    lbl_col_you = tableWin.AddLabel("you", 0, 3)
+    lbl_col_you["fg"] = C_H_BG_COLOR
+    lbl_col_you["bg"] = C_H_FG_COLOR
+    lbl_col_hhi = tableWin.AddLabel("him/her/it", 0, 4)
+    lbl_col_hhi["fg"] = C_H_BG_COLOR
+    lbl_col_hhi["bg"] = C_H_FG_COLOR
+    lbl_col_us = tableWin.AddLabel("us", 0, 5)
+    lbl_col_us["fg"] = C_H_BG_COLOR
+    lbl_col_us["bg"] = C_H_FG_COLOR
+    lbl_col_youp = tableWin.AddLabel("you (plural)", 0, 6)
+    lbl_col_youp["fg"] = C_H_BG_COLOR
+    lbl_col_youp["bg"] = C_H_FG_COLOR
+    lbl_col_them = tableWin.AddLabel("them", 0, 7)
+    lbl_col_them["fg"] = C_H_BG_COLOR
+    lbl_col_them["bg"] = C_H_FG_COLOR
+
+    # Rows Names
+    lbl_row_title = tableWin.AddLabel("SUBJECT", 1, 0)
+    lbl_row_title["fg"]=R_H_FG_COLOR
+    lbl_row_title["bg"]=R_H_BG_COLOR
+    lbl_row_title = tableWin.AddLabel("I", 2, 0)
+    lbl_row_title["fg"]=R_H_FG_COLOR
+    lbl_row_title["bg"]=R_H_BG_COLOR
+    lbl_row_title = tableWin.AddLabel("you", 3, 0)
+    lbl_row_title["fg"]=R_H_FG_COLOR
+    lbl_row_title["bg"]=R_H_BG_COLOR
+    lbl_row_title = tableWin.AddLabel("he/she/it", 4, 0)
+    lbl_row_title["fg"]=R_H_FG_COLOR
+    lbl_row_title["bg"]=R_H_BG_COLOR
+    lbl_row_title = tableWin.AddLabel("we", 5, 0)
+    lbl_row_title["fg"]=R_H_FG_COLOR
+    lbl_row_title["bg"]=R_H_BG_COLOR
+    lbl_row_title = tableWin.AddLabel("you(plural)", 6, 0)
+    lbl_row_title["fg"]=R_H_FG_COLOR
+    lbl_row_title["bg"]=R_H_BG_COLOR
+    lbl_row_title = tableWin.AddLabel("they", 7, 0)
+    lbl_row_title["fg"]=R_H_FG_COLOR
+    lbl_row_title["bg"]=R_H_BG_COLOR
+
+    #I-OBJECT Row
+    lbl_row_i_none = tableWin.AddLabel("jI-", 2, 1)
+    lbl_row_i_none["fg"]=CELL_FG_COLOR
+    lbl_row_i_none["bg"]=CELL_BG_COLOR 
+    lbl_row_i_me = tableWin.AddLabel("---", 2, 2)
+    lbl_row_i_me["fg"]=CELL_FG_COLOR
+    lbl_row_i_me["bg"]=CELL_BG_COLOR 
+    lbl_row_i_you = tableWin.AddLabel("qa-", 2, 3)
+    lbl_row_i_you["fg"]=CELL_FG_COLOR
+    lbl_row_i_you["bg"]=CELL_BG_COLOR 
+    lbl_row_i_hhi = tableWin.AddLabel("vI-", 2, 4)
+    lbl_row_i_hhi["fg"]=CELL_FG_COLOR
+    lbl_row_i_hhi["bg"]=CELL_BG_COLOR 
+    lbl_row_i_us = tableWin.AddLabel("---", 2, 5)
+    lbl_row_i_us["fg"]=CELL_FG_COLOR
+    lbl_row_i_us["bg"]=CELL_BG_COLOR 
+    lbl_row_i_youp = tableWin.AddLabel("Sa-", 2, 6)
+    lbl_row_i_youp["fg"]=CELL_FG_COLOR
+    lbl_row_i_youp["bg"]=CELL_BG_COLOR 
+    lbl_row_i_them = tableWin.AddLabel("vI-", 2, 7)
+    lbl_row_i_them["fg"]=CELL_FG_COLOR
+    lbl_row_i_them["bg"]=CELL_BG_COLOR 
+
+    #you-OBJECT Row
+    lbl_row_you_none = tableWin.AddLabel("bI-", 3, 1)
+    lbl_row_you_none["fg"]=CELL_FG_COLOR
+    lbl_row_you_none["bg"]=CELL_BG_COLOR
+    lbl_row_you_me = tableWin.AddLabel("cho-", 3, 2)
+    lbl_row_you_me["fg"]=CELL_FG_COLOR
+    lbl_row_you_me["bg"]=CELL_BG_COLOR
+    lbl_row_you_you = tableWin.AddLabel("---", 3, 3)
+    lbl_row_you_you["fg"]=CELL_FG_COLOR
+    lbl_row_you_you["bg"]=CELL_BG_COLOR
+    lbl_row_you_hhi = tableWin.AddLabel("Da-", 3, 4)
+    lbl_row_you_hhi["fg"]=CELL_FG_COLOR
+    lbl_row_you_hhi["bg"]=CELL_BG_COLOR
+    lbl_row_you_us = tableWin.AddLabel("ju-", 3, 5)
+    lbl_row_you_us["fg"]=CELL_FG_COLOR
+    lbl_row_you_us["bg"]=CELL_BG_COLOR
+    lbl_row_you_youp = tableWin.AddLabel("---", 3, 6)
+    lbl_row_you_youp["fg"]=CELL_FG_COLOR
+    lbl_row_you_youp["bg"]=CELL_BG_COLOR
+    lbl_row_you_them = tableWin.AddLabel("Da-", 3, 7)
+    lbl_row_you_them["fg"]=CELL_FG_COLOR
+    lbl_row_you_them["bg"]=CELL_BG_COLOR
+
+    #he/she/it-OBJECT Row
+    lbl_row_hhi_none = tableWin.AddLabel("0", 4, 1)
+    lbl_row_hhi_none["fg"]=CELL_FG_COLOR
+    lbl_row_hhi_none["bg"]=CELL_BG_COLOR
+    lbl_row_hhi_me = tableWin.AddLabel("mu-", 4, 2)
+    lbl_row_hhi_me["fg"]=CELL_FG_COLOR
+    lbl_row_hhi_me["bg"]=CELL_BG_COLOR
+    lbl_row_hhi_you = tableWin.AddLabel("Du-", 4, 3)
+    lbl_row_hhi_you["fg"]=CELL_FG_COLOR
+    lbl_row_hhi_you["bg"]=CELL_BG_COLOR
+    lbl_row_hhi_hhi = tableWin.AddLabel("0", 4, 4)
+    lbl_row_hhi_hhi["fg"]=CELL_FG_COLOR
+    lbl_row_hhi_hhi["bg"]=CELL_BG_COLOR
+    lbl_row_hhi_us = tableWin.AddLabel("nu-", 4, 5)
+    lbl_row_hhi_us["fg"]=CELL_FG_COLOR
+    lbl_row_hhi_us["bg"]=CELL_BG_COLOR
+    lbl_row_hhi_youp = tableWin.AddLabel("lI-", 4, 6)
+    lbl_row_hhi_youp["fg"]=CELL_FG_COLOR
+    lbl_row_hhi_youp["bg"]=CELL_BG_COLOR
+    lbl_row_hhi_them = tableWin.AddLabel("0", 4, 7)
+    lbl_row_hhi_them["fg"]=CELL_FG_COLOR
+    lbl_row_hhi_them["bg"]=CELL_BG_COLOR
+
+    #we-OBJECT Row
+    lbl_row_we_none = tableWin.AddLabel("ma-", 5, 1)
+    lbl_row_we_none["fg"]=CELL_FG_COLOR
+    lbl_row_we_none["bg"]=CELL_BG_COLOR
+    lbl_row_we_me = tableWin.AddLabel("---", 5, 2)
+    lbl_row_we_me["fg"]=CELL_FG_COLOR
+    lbl_row_we_me["bg"]=CELL_BG_COLOR
+    lbl_row_we_you = tableWin.AddLabel("pI-", 5, 3)
+    lbl_row_we_you["fg"]=CELL_FG_COLOR
+    lbl_row_we_you["bg"]=CELL_BG_COLOR
+    lbl_row_we_hhi = tableWin.AddLabel("wI-", 5, 4)
+    lbl_row_we_hhi["fg"]=CELL_FG_COLOR
+    lbl_row_we_hhi["bg"]=CELL_BG_COLOR
+    lbl_row_we_us = tableWin.AddLabel("---", 5,  5)
+    lbl_row_we_us["fg"]=CELL_FG_COLOR
+    lbl_row_we_us["bg"]=CELL_BG_COLOR
+    lbl_row_we_youp = tableWin.AddLabel("re-", 5, 6)
+    lbl_row_we_youp["fg"]=CELL_FG_COLOR
+    lbl_row_we_youp["bg"]=CELL_BG_COLOR
+    lbl_row_we_them = tableWin.AddLabel("DI-", 5, 7)
+    lbl_row_we_them["fg"]=CELL_FG_COLOR
+    lbl_row_we_them["bg"]=CELL_BG_COLOR
+
+    #you(plural)-OBJECT Row
+    lbl_row_youp_none = tableWin.AddLabel("Su-", 6, 1)
+    lbl_row_youp_none["fg"]=CELL_FG_COLOR
+    lbl_row_youp_none["bg"]=CELL_BG_COLOR
+    lbl_row_youp_me = tableWin.AddLabel("tu-", 6, 2)
+    lbl_row_youp_me["fg"]=CELL_FG_COLOR
+    lbl_row_youp_me["bg"]=CELL_BG_COLOR
+    lbl_row_youp_you = tableWin.AddLabel("---", 6, 3)
+    lbl_row_youp_you["fg"]=CELL_FG_COLOR
+    lbl_row_youp_you["bg"]=CELL_BG_COLOR
+    lbl_row_youp_hhi = tableWin.AddLabel("bo-", 6, 4)
+    lbl_row_youp_hhi["fg"]=CELL_FG_COLOR
+    lbl_row_youp_hhi["bg"]=CELL_BG_COLOR
+    lbl_row_youp_us = tableWin.AddLabel("cho-", 6, 5)
+    lbl_row_youp_us["fg"]=CELL_FG_COLOR
+    lbl_row_youp_us["bg"]=CELL_BG_COLOR
+    lbl_row_youp_youp = tableWin.AddLabel("---", 6, 6)
+    lbl_row_youp_youp["fg"]=CELL_FG_COLOR
+    lbl_row_youp_youp["bg"]=CELL_BG_COLOR
+    lbl_row_youp_them = tableWin.AddLabel("bo-", 6, 7)
+    lbl_row_youp_them["fg"]=CELL_FG_COLOR
+    lbl_row_youp_them["bg"]=CELL_BG_COLOR
+
+    #they-OBJECT Row
+    lbl_row_they_none = tableWin.AddLabel("0", 7, 1)
+    lbl_row_they_none["fg"]=CELL_FG_COLOR
+    lbl_row_they_none["bg"]=CELL_BG_COLOR
+    lbl_row_they_me = tableWin.AddLabel("mu-", 7, 2)
+    lbl_row_they_me["fg"]=CELL_FG_COLOR
+    lbl_row_they_me["bg"]=CELL_BG_COLOR
+    lbl_row_they_you = tableWin.AddLabel("nI-", 7, 3)
+    lbl_row_they_you["fg"]=CELL_FG_COLOR
+    lbl_row_they_you["bg"]=CELL_BG_COLOR
+    lbl_row_they_hhi = tableWin.AddLabel("lu-", 7, 4)
+    lbl_row_they_hhi["fg"]=CELL_FG_COLOR
+    lbl_row_they_hhi["bg"]=CELL_BG_COLOR
+    lbl_row_they_us = tableWin.AddLabel("nu-", 7, 5)
+    lbl_row_they_us["fg"]=CELL_FG_COLOR
+    lbl_row_they_us["bg"]=CELL_BG_COLOR
+    lbl_row_they_youp = tableWin.AddLabel("lI-", 7, 6)
+    lbl_row_they_youp["fg"]=CELL_FG_COLOR
+    lbl_row_they_youp["bg"]=CELL_BG_COLOR
+    lbl_row_they_them = tableWin.AddLabel("0", 7, 7)
+    lbl_row_they_them["fg"]=CELL_FG_COLOR
+    lbl_row_they_them["bg"]=CELL_BG_COLOR
+
