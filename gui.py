@@ -7,8 +7,7 @@ class Window:
         self.master = master
         self.root = Tk() if master is None else Toplevel(master)
         self.root.title(title)
-        self.root.geometry(f"{width}x{height}")
-        pass
+        self.root.geometry("600x400")
 
     def AddLabel(self, text, row, column, col_span=1):
         #This creates a label in the window in a particular grid location. The various aspects are then set in the Label
@@ -33,6 +32,3 @@ class Window:
     
     def Run(self):
         self.root.mainloop()
-        pass
-
-    pass

@@ -1,5 +1,5 @@
 from gui import *
-from subwindows import *
+from constants import *
 
 #----------- APP CLASS - INHERITS WINDOW CLASS AND ADDS THE LEARNING OPTIONS -----------
 class App(Window):
@@ -9,97 +9,69 @@ class App(Window):
 
     def setup_ui(self):
         self.AddLabel("Klingon Hol Teacher's Aid", 0, 0)
-        self.AddButton("Verb Prefix Table", self.show_verb_prefix_table_ref, 1, 0)
-        self.AddButton("Verb Prefix Table Test!", self.show_verb_prefix_table_test, 2, 0)
+        self.AddButton("Verb Prefix Table", self.show_verb_prefix_table, 2, 0)
 
-    ## Various learning option functions
-    def show_verb_prefix_table_ref(self):
-        win_verb_prefix_ref = Window("Verb Prefix Table", 400, 600, self.root)
-        verb_prefix_table_ref(win_verb_prefix_ref)
-        win_verb_prefix_ref.show_modal()
-
-    def show_verb_prefix_table_test(self):
-        win_verb_prefix_test = VerbPrefixTableTest("Verb Prefix Test!", 400, 600, self.root)
+    def show_verb_prefix_table(self):
+        win_verb_prefix_test = VerbPrefixTable("Verb Prefix Test!", 400, 600, self.root)
         win_verb_prefix_test.show_modal()
     pass
 
 #---------- TEST WINDOW CLASSES ----------
-class VerbPrefixTableTest(Window):
+class VerbPrefixTable(Window):
     def __init__(self, title, height, width, master):
         super().__init__(title, height, width, master)
         self.rows, self.cols = (6, 7)
+        self.col_labels = [""]*(self.cols + 1)
+        self.row_labels = [""]*(self.rows + 1)
         self.entry_box = [["" for j in range(self.cols)] for i in range(self.rows)]
         #self.answers = [["" for j in range(self.cols)] for i in range(self.rows)]
         self.answer_key = [["" for j in range(self.cols)] for i in range(self.rows)]
+        self.btn_show_key = None
+        self.btn_clear = None
+        self.btn_score_test = None
         self.setup_ui()  # Set up the specific UI elements
         self.set_answer_key()
+        self.set_null() #I-me, you-you, I-us etc are NOT VALID for a prefix ("---"), this is NOT the same as 0 for the combination does not have a prefix.
 
     def setup_ui(self):
-        C_H_BG_COLOR="green"
-        C_H_FG_COLOR="red"
-        R_H_BG_COLOR="grey"
-        R_H_FG_COLOR="blue"
-        #BG and FG for the entry boxes is not currently used.
-        #ENTRY_BG_COLOR="lightgrey"
-        #ENTRY_FG_COLOR="black"
         ENTRY_WIDTH=3 #This sets the width of all all the entry windows.
 
         # Column Names
-        lbl_col_title = self.AddLabel("OBJECT", 0, 0)
-        lbl_col_title["fg"] = C_H_BG_COLOR
-        lbl_col_title["bg"] = C_H_FG_COLOR
-        lbl_col_none = self.AddLabel("none", 0, 1)
-        lbl_col_none["fg"] = C_H_BG_COLOR
-        lbl_col_none["bg"] = C_H_FG_COLOR
-        lbl_col_me = self.AddLabel("me", 0, 2)
-        lbl_col_me["fg"] = C_H_BG_COLOR
-        lbl_col_me["bg"] = C_H_FG_COLOR
-        lbl_col_you = self.AddLabel("you", 0, 3)
-        lbl_col_you["fg"] = C_H_BG_COLOR
-        lbl_col_you["bg"] = C_H_FG_COLOR
-        lbl_col_hhi = self.AddLabel("him/her/it", 0, 4)
-        lbl_col_hhi["fg"] = C_H_BG_COLOR
-        lbl_col_hhi["bg"] = C_H_FG_COLOR
-        lbl_col_us = self.AddLabel("us", 0, 5)
-        lbl_col_us["fg"] = C_H_BG_COLOR
-        lbl_col_us["bg"] = C_H_FG_COLOR
-        lbl_col_youp = self.AddLabel("you (plural)", 0, 6)
-        lbl_col_youp["fg"] = C_H_BG_COLOR
-        lbl_col_youp["bg"] = C_H_FG_COLOR
-        lbl_col_them = self.AddLabel("them", 0, 7)
-        lbl_col_them["fg"] = C_H_BG_COLOR
-        lbl_col_them["bg"] = C_H_FG_COLOR
+        self.col_labels[0] = self.AddLabel("OBJECT", 0, 0)
+        self.col_labels[1] = self.AddLabel("none", 0, 1)
+        self.col_labels[2] = self.AddLabel("me", 0, 2)
+        self.col_labels[3] = self.AddLabel("you", 0, 3)
+        self.col_labels[4] = self.AddLabel("him/her/it", 0, 4)
+        self.col_labels[5] = self.AddLabel("us", 0, 5)
+        self.col_labels[6] = self.AddLabel("you (plural)", 0, 6)
+        self.col_labels[7]= self.AddLabel("them", 0, 7)
+        #Set colors and other attributes if needed
+        for i in range(self.cols + 1):
+            self.col_labels[i]["fg"] = VP_C_H_BG
+            self.col_labels[i]["bg"] = VP_C_H_FG
 
         # Rows Names
-        lbl_row_title = self.AddLabel("SUBJECT", 1, 0)
-        lbl_row_title["fg"]=R_H_FG_COLOR
-        lbl_row_title["bg"]=R_H_BG_COLOR
-        lbl_row_title = self.AddLabel("I", 2, 0)
-        lbl_row_title["fg"]=R_H_FG_COLOR
-        lbl_row_title["bg"]=R_H_BG_COLOR
-        lbl_row_title = self.AddLabel("you", 3, 0)
-        lbl_row_title["fg"]=R_H_FG_COLOR
-        lbl_row_title["bg"]=R_H_BG_COLOR
-        lbl_row_title = self.AddLabel("he/she/it", 4, 0)
-        lbl_row_title["fg"]=R_H_FG_COLOR
-        lbl_row_title["bg"]=R_H_BG_COLOR
-        lbl_row_title = self.AddLabel("we", 5, 0)
-        lbl_row_title["fg"]=R_H_FG_COLOR
-        lbl_row_title["bg"]=R_H_BG_COLOR
-        lbl_row_title = self.AddLabel("you(plural)", 6, 0)
-        lbl_row_title["fg"]=R_H_FG_COLOR
-        lbl_row_title["bg"]=R_H_BG_COLOR
-        lbl_row_title = self.AddLabel("they", 7, 0)
-        lbl_row_title["fg"]=R_H_FG_COLOR
-        lbl_row_title["bg"]=R_H_BG_COLOR
+        self.row_labels[0] = self.AddLabel("SUBJECT", 1, 0)
+        self.row_labels[1] = self.AddLabel("I", 2, 0)
+        self.row_labels[2] = self.AddLabel("you", 3, 0)
+        self.row_labels[3] = self.AddLabel("he/she/it", 4, 0)
+        self.row_labels[4] = self.AddLabel("we", 5, 0)
+        self.row_labels[5] = self.AddLabel("you(plural)", 6, 0)
+        self.row_labels[6] = self.AddLabel("they", 7, 0)
+        for j in range(self.rows + 1):
+            self.row_labels[j]["fg"] = VP_R_H_FG
+            self.row_labels[j]["bg"] = VP_R_H_BG
 
         #Set up all our entries
-        for i in range(0, 6):
-            for j in range (0, 7):
+        for i in range(0, self.rows):
+            for j in range (0, self.cols):
                 self.entry_box[i][j] = self.AddEntry(i+2, j+1, width=ENTRY_WIDTH)
     
-        #Add Button to submit the test.
-        submit_test = self.AddButton("'el: Submit!", self.score_test, 8, 0, col_span=8) 
+        #Add Buttons to show answers for study and referenece, a clear button, and a submit test button.
+        self.btn_show_key = self.AddButton("moHaq yIcha': Show prefixes!", self.show_key, 8, 0, col_span=4)
+        self.btn_clear = self.AddButton("wa'chaw yIteq: Clear table!", self.clear, 8, 4, col_span=4)
+        self.btn_score_test = self.AddButton("'el: Submit!", self.score_test, 9, 0, col_span=8)
+
 
     def set_answer_key(self):
         self.answer_key[0][0] = "jI-"
@@ -134,7 +106,7 @@ class VerbPrefixTableTest(Window):
         self.answer_key[4][1] = "tu-"
         self.answer_key[4][2] = "---"
         self.answer_key[4][3] = "bo-"
-        self.answer_key[4][4] = "cho-"
+        self.answer_key[4][4] = "che-"
         self.answer_key[4][5] = "---"
         self.answer_key[4][6] = "bo-"
         self.answer_key[5][0] = "0"
@@ -145,23 +117,47 @@ class VerbPrefixTableTest(Window):
         self.answer_key[5][5] = "lI-"
         self.answer_key[5][6] = "0"
 
-    # Button functions in sub windows.
+    def set_null(self):    
+        for i in range(0, self.rows):
+            for j in range (0, self.cols):
+                if self.answer_key[i][j] == "---":
+                    self.entry_box[i][j].delete(0, END) #Should not be needed, but just in case.
+                    self.entry_box[i][j].insert(0, "---")
+                    self.entry_box[i][j]["bg"] = VP_CELL_BG_REF
+                    self.entry_box[i][j].config(state="disabled") #Disabled so the user cannot change these, kept as boxes, not labels as that is simply cleaner.   
+
+    # Button functions
     def score_test(self):
         qapla = True
 
         for i in range(0, 6):
             for j in range (0, 7):
-                print(f"self.entry_box[][].get(): {self.entry_box[i][j].get()} , self.answer_key[][]: {self.answer_key[i][j]} ")
+                #We do check the invalid combinations as they are disabled and cannot change.
                 if self.entry_box[i][j].get() == self.answer_key[i][j]:
-                    self.entry_box[i][j]["bg"] = "green"
+                    self.entry_box[i][j]["bg"] = VP_CELL_BG_CORRECT
                 else:
-                    self.entry_box[i][j]["bg"] = "red"
+                    self.entry_box[i][j]["bg"] = VP_CELL_BG_WRONG
                     qapla = False
- 
         if qapla:
             print("Qapla'!")
         else:
             print("ghobe'")
 
+    def show_key(self):
+        self.clear() #Clear existing information if any.
+        self.btn_score_test.config(state="disabled") #We disable the button to submit as this is for reference.
+        for i in range(0, 6):
+            for j in range (0, 7):
+                #We do not insert the invalid combinations, they are set at the window intialization and never changed.
+                if self.entry_box[i][j].get() != "---":
+                    self.entry_box[i][j].insert(0, self.answer_key[i][j]) #Enter the information from our answer key.
+                    self.entry_box[i][j]["bg"] = VP_CELL_BG_REF #Shows this is for reference.
 
-    
+    def clear(self):
+         self.btn_score_test.config(state="active") #We enable the button to submit as the table is cleared.
+         for i in range(0, 6):
+            for j in range (0, 7):
+                #We do not clear the invalid combination boxes.
+                if self.entry_box[i][j].get() != "---":
+                    self.entry_box[i][j].delete(0, END) #Clear existing information, if any.
+                    self.entry_box[i][j]["bg"] = VP_CELL_BG_ENTRY #Clear the background if the user ran a test.
