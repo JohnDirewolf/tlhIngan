@@ -7,13 +7,18 @@ class Window:
         self.master = master
         self.root = Tk() if master is None else Toplevel(master)
         self.root.title(title)
-        self.root.geometry("600x400")
+        self.root.geometry(f"{width}x{height}")
 
     def AddLabel(self, text, row, column, col_span=1):
         #This creates a label in the window in a particular grid location. The various aspects are then set in the Label
         lbl = Label(self.root, text=text)
         lbl.grid(row=row, column=column, columnspan=col_span)
         return lbl 
+    
+    def AddTextBox(self, height, width, row, column, col_span=1):
+        txt_box = Text(self.root, width=width, height=height)
+        txt_box.grid(row=row, column=column, columnspan=col_span)
+        return txt_box
     
     def AddButton(self, text, command, row, column, col_span=1):
         #command does not do anything yet.

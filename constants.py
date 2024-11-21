@@ -1,3 +1,5 @@
+DEV = True
+
 #Verb Prefix Table Colors
 VP_C_H_FG="red"
 VP_C_H_BG="green"

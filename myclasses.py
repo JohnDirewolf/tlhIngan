@@ -1,5 +1,35 @@
 from gui import *
 from constants import *
+from database import *
+
+__all__ = ["DevWin", "App", "VerbPrefixTable"]
+
+#----------- UTILITY CLASS -------------
+#This just creates a window used in development
+class DevWin(Window):
+    def __init__(self, title, height, width, master):
+        super().__init__(title, height, width, master)
+        self.output = ""
+        self.setup_ui()
+
+    def setup_ui(self):
+        self.output = self.AddTextBox(10, 120, 0, 0, col_span=3)
+        self.AddButton("Show Local Python Dictionary", self.print_python_dict, 1, 0)
+        self.AddButton("Show Loaded Python Dictionary", self.print_loaded_dict, 1, 1)
+        self.AddButton("Clear Output", self.clear_output, 1, 3)
+        self.AddButton("Save Dictionary", save_dict, 2, 0)
+        self.AddButton("Load Dictionary", load_dict, 2, 1)
+
+    def print_python_dict(self):
+        self.clear_output()
+        self.output.insert(END, get_dict())
+
+    def print_loaded_dict(self):
+        self.clear_output()
+        self.output.insert(END, get_dict())
+
+    def clear_output(self):
+        self.output.delete("1.0", END)
 
 #----------- APP CLASS - INHERITS WINDOW CLASS AND ADDS THE LEARNING OPTIONS -----------
 class App(Window):
@@ -10,13 +40,27 @@ class App(Window):
     def setup_ui(self):
         self.AddLabel("Klingon Hol Teacher's Aid", 0, 0)
         self.AddButton("Verb Prefix Table", self.show_verb_prefix_table, 2, 0)
+        self.AddLabel("""Klingon language is taken from 'The Klingon Dictionary' by Marc Okrand.\n
+                      This app provides various practice drills to help memorize things like verb prefixes and locations.\n
+                      This app does NOT provide information on pronounciation or grammar.\n
+                      Also this app does not include new additions to the language out side of 'The Klingon Dictionary'.\n
+                      To learn more about this beautiful langauge, please see 'The Klingon Dictionary' and other books by Marc Okrand.""", 3, 0)
+        if DEV:
+            self.AddButton("Show Development Window", self.show_dev_window, 4, 0)
 
     def show_verb_prefix_table(self):
         win_verb_prefix_test = VerbPrefixTable("Verb Prefix Test!", 400, 600, self.root)
         win_verb_prefix_test.show_modal()
+
+    def show_dev_window(self):
+        dev_win = DevWin("Development Window", 400, 1000, self.root)
+        dev_win.show_modal()
     pass
 
-#---------- TEST WINDOW CLASSES ----------
+#--------- FLASH CARD CLASSES -----------
+
+
+#---------- TABLE TEST CLASSES ----------
 class VerbPrefixTable(Window):
     def __init__(self, title, height, width, master):
         super().__init__(title, height, width, master)
@@ -47,6 +91,7 @@ class VerbPrefixTable(Window):
         self.col_labels[7]= self.AddLabel("them", 0, 7)
         #Set colors and other attributes if needed
         for i in range(self.cols + 1):
+            self.col_labels[i].config(font =("Courier", 14)) #--------------------
             self.col_labels[i]["fg"] = VP_C_H_BG
             self.col_labels[i]["bg"] = VP_C_H_FG
 
