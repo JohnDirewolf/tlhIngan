@@ -38,13 +38,15 @@ class App(Window):
         self.setup_ui()  # Set up the specific UI elements
 
     def setup_ui(self):
-        self.AddLabel("Klingon Hol Teacher's Aid", 0, 0)
+        self.AddLabel("Klingon Hol Teacher's Aid", 0, 0, 2)
+        self.AddLabel("Tables", 1, 0)
+        self.AddLabel("Flash Cards", 1, 1)
         self.AddButton("Verb Prefix Table", self.show_verb_prefix_table, 2, 0)
         self.AddLabel("""Klingon language is taken from 'The Klingon Dictionary' by Marc Okrand.\n
                       This app provides various practice drills to help memorize things like verb prefixes and locations.\n
                       This app does NOT provide information on pronounciation or grammar.\n
                       Also this app does not include new additions to the language out side of 'The Klingon Dictionary'.\n
-                      To learn more about this beautiful langauge, please see 'The Klingon Dictionary' and other books by Marc Okrand.""", 3, 0)
+                      To learn more about this beautiful langauge, please see 'The Klingon Dictionary' and other books by Marc Okrand.""", 3, 0, 2)
         if DEV:
             self.AddButton("Show Development Window", self.show_dev_window, 4, 0)
 
@@ -58,7 +60,10 @@ class App(Window):
     pass
 
 #--------- FLASH CARD CLASSES -----------
-
+class FlashCard(Window):
+    def __init__(self, title, master):
+        super().__init__(title, 600, 600, master)
+        self.setup_ui()  # Set up the specific UI elements
 
 #---------- TABLE TEST CLASSES ----------
 class VerbPrefixTable(Window):
@@ -78,22 +83,37 @@ class VerbPrefixTable(Window):
         self.set_null() #I-me, you-you, I-us etc are NOT VALID for a prefix ("---"), this is NOT the same as 0 for the combination does not have a prefix.
 
     def setup_ui(self):
-        ENTRY_WIDTH=3 #This sets the width of all all the entry windows.
+        ENTRY_WIDTH=4 #This sets the width of all all the entry windows.
+        #Set the Grid to be of consistent height and width.
+        MINSIZE_C0 = 120
+        MINSIZE_C = 60
+        MINSIZE_R0 = 62
+        MINSIZE_R = 40
+        self.root.grid_columnconfigure([0], minsize=MINSIZE_C0)
+        self.root.grid_columnconfigure([1, 2, 3, 4, 5, 6, 7], minsize=MINSIZE_C)
+        self.root.grid_rowconfigure(0, minsize=MINSIZE_R0)
+        self.root.grid_rowconfigure([1, 2, 3, 4, 5, 6], minsize=MINSIZE_R)
 
+        # Frame to give the Column a nice background color.
+        frm1 = self.AddFrame(0, 0, col_span=8)
+        frm1["width"] = MINSIZE_C0 + (MINSIZE_C * 7)
+        frm1["height"] = MINSIZE_R0
+        frm1["bg"] = VP_C_H_BG
+        frm1.grid(sticky="ew")
         # Column Names
         self.col_labels[0] = self.AddLabel("OBJECT", 0, 0)
         self.col_labels[1] = self.AddLabel("none", 0, 1)
         self.col_labels[2] = self.AddLabel("me", 0, 2)
         self.col_labels[3] = self.AddLabel("you", 0, 3)
-        self.col_labels[4] = self.AddLabel("him/her/it", 0, 4)
+        self.col_labels[4] = self.AddLabel("him/\nher/\nit", 0, 4)
         self.col_labels[5] = self.AddLabel("us", 0, 5)
-        self.col_labels[6] = self.AddLabel("you (plural)", 0, 6)
+        self.col_labels[6] = self.AddLabel("you\nplural", 0, 6)
         self.col_labels[7]= self.AddLabel("them", 0, 7)
         #Set colors and other attributes if needed
         for i in range(self.cols + 1):
-            self.col_labels[i].config(font =("Courier", 14)) #--------------------
-            self.col_labels[i]["fg"] = VP_C_H_BG
-            self.col_labels[i]["bg"] = VP_C_H_FG
+            self.col_labels[i].config(font =(VP_H_FONT, VP_H_FONT_SIZE))
+            self.col_labels[i]["fg"] = VP_C_H_FG
+            self.col_labels[i]["bg"] = "lightgrey" #VP_C_H_BG
 
         # Rows Names
         self.row_labels[0] = self.AddLabel("SUBJECT", 1, 0)
@@ -104,6 +124,7 @@ class VerbPrefixTable(Window):
         self.row_labels[5] = self.AddLabel("you(plural)", 6, 0)
         self.row_labels[6] = self.AddLabel("they", 7, 0)
         for j in range(self.rows + 1):
+            self.row_labels[j].config(font =(VP_H_FONT, VP_H_FONT_SIZE))
             self.row_labels[j]["fg"] = VP_R_H_FG
             self.row_labels[j]["bg"] = VP_R_H_BG
 
@@ -111,6 +132,7 @@ class VerbPrefixTable(Window):
         for i in range(0, self.rows):
             for j in range (0, self.cols):
                 self.entry_box[i][j] = self.AddEntry(i+2, j+1, width=ENTRY_WIDTH)
+                self.entry_box[i][j].config(font =(VP_C_FONT, VP_C_FONT_SIZE))
     
         #Add Buttons to show answers for study and referenece, a clear button, and a submit test button.
         self.btn_show_key = self.AddButton("moHaq yIcha': Show prefixes!", self.show_key, 8, 0, col_span=4)
