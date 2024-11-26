@@ -17,3 +17,8 @@ VP_H_FONT = "Courier"
 VP_H_FONT_SIZE = 12
 VP_C_FONT = "Courier"
 VP_C_FONT_SIZE = 12
+
+#Flash Card
+FC_TITLE_FONT = "Courier"
+FC_TITLE_SIZE = 14
+FC_TITLE_FG = "black"

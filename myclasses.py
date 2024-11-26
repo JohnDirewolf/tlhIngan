@@ -42,6 +42,7 @@ class App(Window):
         self.AddLabel("Tables", 1, 0)
         self.AddLabel("Flash Cards", 1, 1)
         self.AddButton("Verb Prefix Table", self.show_verb_prefix_table, 2, 0)
+        self.AddButton("Verb Prefix Flash Cards", self.show_verb_prefix_cards, 2, 1)
         self.AddLabel("""Klingon language is taken from 'The Klingon Dictionary' by Marc Okrand.\n
                       This app provides various practice drills to help memorize things like verb prefixes and locations.\n
                       This app does NOT provide information on pronounciation or grammar.\n
@@ -54,16 +55,34 @@ class App(Window):
         win_verb_prefix_test = VerbPrefixTable("Verb Prefix Test!", 400, 600, self.root)
         win_verb_prefix_test.show_modal()
 
+    def show_verb_prefix_cards(self):
+        win_verb_prefix_test = FlashCards("Verb Pronoun Prefixes!", self.root)
+        win_verb_prefix_test.show_modal()
+
     def show_dev_window(self):
         dev_win = DevWin("Development Window", 400, 1000, self.root)
         dev_win.show_modal()
     pass
 
 #--------- FLASH CARD CLASSES -----------
-class FlashCard(Window):
+class FlashCards(Window):
     def __init__(self, title, master):
-        super().__init__(title, 600, 600, master)
+        super().__init__("Flash Cards!", 600, 600, master)
+        self.title = title
+        self.lbl_title = None
+        self.lbl_word = None
+        self.entry_word = None
+        self.entry_type = None
+        self.btn_submit = None
+        self.btn_show = None
+        self.btn_next = None
+        self.btn_close = None 
         self.setup_ui()  # Set up the specific UI elements
+
+    def setup_ui(self):
+        self.lbl_title = self.AddLabel(self.title, 0, 0)
+        self.lbl_title.config(font =(FC_TITLE_FONT, FC_TITLE_SIZE))
+        self.lbl_title["fg"] = FC_TITLE_FG
 
 #---------- TABLE TEST CLASSES ----------
 class VerbPrefixTable(Window):
@@ -94,12 +113,6 @@ class VerbPrefixTable(Window):
         self.root.grid_rowconfigure(0, minsize=MINSIZE_R0)
         self.root.grid_rowconfigure([1, 2, 3, 4, 5, 6], minsize=MINSIZE_R)
 
-        # Frame to give the Column a nice background color.
-        frm1 = self.AddFrame(0, 0, col_span=8)
-        frm1["width"] = MINSIZE_C0 + (MINSIZE_C * 7)
-        frm1["height"] = MINSIZE_R0
-        frm1["bg"] = VP_C_H_BG
-        frm1.grid(sticky="ew")
         # Column Names
         self.col_labels[0] = self.AddLabel("OBJECT", 0, 0)
         self.col_labels[1] = self.AddLabel("none", 0, 1)
@@ -113,7 +126,7 @@ class VerbPrefixTable(Window):
         for i in range(self.cols + 1):
             self.col_labels[i].config(font =(VP_H_FONT, VP_H_FONT_SIZE))
             self.col_labels[i]["fg"] = VP_C_H_FG
-            self.col_labels[i]["bg"] = "lightgrey" #VP_C_H_BG
+            self.col_labels[i]["bg"] = VP_C_H_BG
 
         # Rows Names
         self.row_labels[0] = self.AddLabel("SUBJECT", 1, 0)
@@ -138,7 +151,6 @@ class VerbPrefixTable(Window):
         self.btn_show_key = self.AddButton("moHaq yIcha': Show prefixes!", self.show_key, 8, 0, col_span=4)
         self.btn_clear = self.AddButton("wa'chaw yIteq: Clear table!", self.clear, 8, 4, col_span=4)
         self.btn_score_test = self.AddButton("'el: Submit!", self.score_test, 9, 0, col_span=8)
-
 
     def set_answer_key(self):
         self.answer_key[0][0] = "jI-"

@@ -25,10 +25,11 @@ class Window:
         frm.grid(row=row, column=column, columnspan=col_span)
         return frm
 
-    def AddLabel(self, text, row, column, col_span=1):
+    def AddLabel(self, text, row, column, col_span=1, sticky="nsew"):
         #This creates a label in the window in a particular grid location. The various aspects are then set in the Label
+        #This defaluts to sticky so that the label background is the same size as the grid it is created in.
         lbl = Label(self.root, text=text)
-        lbl.grid(row=row, column=column, columnspan=col_span)
+        lbl.grid(row=row, column=column, columnspan=col_span, sticky=sticky)
         return lbl 
     
     def AddTextBox(self, height, width, row, column, col_span=1):
