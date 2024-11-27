@@ -3,11 +3,12 @@
 #This is set as as seperate module in case in future we want to actually implmement a full database interface.
 
 import json
+import constants
 
 _klingon_dict = {
-    "verb_prefixes": [{"english": "I-none", "klingon": "jI-"}, {"english": "I-you", "klingon": "qa-"},{"english": "I-him/her/it", "klingon": "vI-"}],
-    "body_parts":[{"english": "arm", "klingon": "Des"}, {"english": "leg", "klingon": "'uS"},{"english": "head", "klingon": "nach"}],
-    "locations": [{"english": "here", "naDev": "jI-"}, {"english": "there", "klingon": "pa'"},{"english": "in front of", "klingon": "tlhop"}]
+    constants.VERB_PREFIXES: [{"english": "I-none", "klingon": "jI-"}, {"english": "I-you", "klingon": "qa-"},{"english": "I-him/her/it", "klingon": "vI-"}],
+    constants.BODY_PARTS: [{"english": "arm", "klingon": "Des"}, {"english": "leg", "klingon": "'uS"},{"english": "head", "klingon": "nach"}],
+    constants.REL_LOCATIONS: [{"english": "here", "naDev": "jI-"}, {"english": "there", "klingon": "pa'"},{"english": "in front of", "klingon": "tlhop"}]
 }
 
 def save_dict():

@@ -53,36 +53,74 @@ class App(Window):
 
     def show_verb_prefix_table(self):
         win_verb_prefix_test = VerbPrefixTable("Verb Prefix Test!", 400, 600, self.root)
-        win_verb_prefix_test.show_modal()
+        win_verb_prefix_test.ShowModal()
 
     def show_verb_prefix_cards(self):
-        win_verb_prefix_test = FlashCards("Verb Pronoun Prefixes!", self.root)
-        win_verb_prefix_test.show_modal()
+        win_verb_prefix_test = FlashCards("Verb Pronoun Prefixes", self.root)
+        win_verb_prefix_test.ShowModal()
 
     def show_dev_window(self):
         dev_win = DevWin("Development Window", 400, 1000, self.root)
-        dev_win.show_modal()
+        dev_win.ShowModal()
     pass
 
 #--------- FLASH CARD CLASSES -----------
 class FlashCards(Window):
     def __init__(self, title, master):
-        super().__init__("Flash Cards!", 600, 600, master)
+        super().__init__("Flash Cards!", 700, 600, master)
+        self.rows, self.cols = (6, 3)
         self.title = title
         self.lbl_title = None
         self.lbl_word = None
-        self.entry_word = None
+        self.entry_answer = None
         self.entry_type = None
         self.btn_submit = None
         self.btn_show = None
         self.btn_next = None
+        self.btn_prev = None
         self.btn_close = None 
-        self.setup_ui()  # Set up the specific UI elements
+        self.klingon = {}
+        self.load_dict()
+        self.setup_ui()  # Set up the specific UI elements at start
 
     def setup_ui(self):
-        self.lbl_title = self.AddLabel(self.title, 0, 0)
+        self.root.resizable(width=False, height=False)
+        # Set up the Grid sizes
+        MINSIZE_COL = 100
+        MINSIZE_ROW = 150
+        self.root.grid_columnconfigure([0, 1, 2, 3, 4, 5], minsize=MINSIZE_COL)
+        self.root.grid_rowconfigure([0, 1, 2, 3, ], minsize=MINSIZE_ROW)
+        
+        self.lbl_title = self.AddLabel(self.title, 0, 0, col_span=4)
         self.lbl_title.config(font =(FC_TITLE_FONT, FC_TITLE_SIZE))
         self.lbl_title["fg"] = FC_TITLE_FG
+        self.lbl_word = self.AddLabel(self.title, 1, 1, col_span=2)
+        self.lbl_word.config(font =(FC_WORD_FONT, FC_WORD_SIZE))
+        self.lbl_word["fg"] = FC_WORD_FG
+        self.entry_answer = self.AddEntry(2, 1, col_span= 2, width=MINSIZE_COL*2)
+        self.entry_type = self.AddEntry(3, 1, col_span=2, width=MINSIZE_COL*2)
+        self.btn_submit = self.AddButton("Submit", self.submit, 4, 1)
+        self.btn_show = self.AddButton("Show", self.show, 4, 2)
+        self.btn_next = self.AddButton("Next >", self.next, 4, 3)
+        self.btn_prev = self.AddButton("< Prev", self.prev, 4, 0, col_span=1)
+        self.btn_close = self.AddButton("Close", self.Close, 5, 1, col_span=2)
+
+    def load_dict(self):
+        print("Load Dictionary")
+
+    def submit(self):
+        print("Submit")
+
+    def show(self):
+        print("Show")
+    
+    def next(self):
+        print("Next")
+
+    def prev(self):
+        print("Prev")
+
+    
 
 #---------- TABLE TEST CLASSES ----------
 class VerbPrefixTable(Window):

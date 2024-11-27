@@ -37,10 +37,13 @@ class Window:
         txt_box.grid(row=row, column=column, columnspan=col_span)
         return txt_box
     
-    def show_modal(self):
+    def ShowModal(self):
         #Does not work, but through all research no one actually knows how to make this work.
         self.root.grab_set()  # Make the window modal
         self.master.wait_window(self.root)  # Block interaction with the master until this window is closed
     
+    def Close(self):
+        self.root.destroy()
+
     def Run(self):
         self.root.mainloop()
