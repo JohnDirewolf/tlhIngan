@@ -31,6 +31,8 @@ class Window:
         lbl = Label(self.root, text=text)
         lbl.grid(row=row, column=column, columnspan=col_span, sticky=sticky)
         return lbl 
+    #Justifying an object in grid uses anchor, NOT justify.
+
     
     def AddTextBox(self, height, width, row, column, col_span=1):
         txt_box = Text(self.root, width=width, height=height)

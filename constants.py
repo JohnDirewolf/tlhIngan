@@ -23,8 +23,11 @@ FC_TITLE_FONT = "Courier"
 FC_TITLE_SIZE = 14
 FC_TITLE_FG = "black"
 FC_WORD_FONT = "Arial"
-FC_WORD_SIZE = 24
+FC_WORD_SIZE = 28
 FC_WORD_FG = "black"
+FC_ENTRY_FONT = "Courier"
+FC_ENTRY_SIZE = 14
+
 
 #Word Types
 VERB_PREFIXES = "verb_prefixes"

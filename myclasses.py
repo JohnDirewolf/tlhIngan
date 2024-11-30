@@ -31,6 +31,17 @@ class DevWin(Window):
     def clear_output(self):
         self.output.delete("1.0", END)
 
+#This is a window used in learning GUI formatting and layout
+class LayoutWin(Window):
+    def __init__(self, title, height, width, master):
+        super().__init__(title, height, width, master)
+        self.frame = ""
+        self.setup_ui()
+
+    def setup_ui(self):
+        self.frame = Frame(master=self.root, relief=RAISED, borderwidth=4)
+        self.frame.grid(row=self.rows, column=self.cols, padx=5, pady=5)
+
 #----------- APP CLASS - INHERITS WINDOW CLASS AND ADDS THE LEARNING OPTIONS -----------
 class App(Window):
     def __init__(self, title, height, width):
@@ -62,12 +73,16 @@ class App(Window):
     def show_dev_window(self):
         dev_win = DevWin("Development Window", 400, 1000, self.root)
         dev_win.ShowModal()
+
+    def show_layout_window(self):
+        dev_win = LayoutWin("Layout Window", 500, 500, self.root)
+        dev_win.ShowModal()
     pass
 
 #--------- FLASH CARD CLASSES -----------
 class FlashCards(Window):
     def __init__(self, title, master):
-        super().__init__("Flash Cards!", 700, 600, master)
+        super().__init__("Flash Cards!", 500, 400, master)
         self.rows, self.cols = (6, 3)
         self.title = title
         self.lbl_title = None
@@ -75,34 +90,54 @@ class FlashCards(Window):
         self.entry_answer = None
         self.entry_type = None
         self.btn_submit = None
+        self.frm_submit = None
         self.btn_show = None
         self.btn_next = None
         self.btn_prev = None
+        self.frm_prev = None
         self.btn_close = None 
         self.klingon = {}
         self.load_dict()
         self.setup_ui()  # Set up the specific UI elements at start
 
     def setup_ui(self):
-        self.root.resizable(width=False, height=False)
         # Set up the Grid sizes
-        MINSIZE_COL = 100
-        MINSIZE_ROW = 150
+        MINSIZE_COL = 90
+        MINSIZE_ROW = 30
+        MINSIZE_ROW_WORD = 100
+        self.root.resizable(width=False, height=False)
         self.root.grid_columnconfigure([0, 1, 2, 3, 4, 5], minsize=MINSIZE_COL)
-        self.root.grid_rowconfigure([0, 1, 2, 3, ], minsize=MINSIZE_ROW)
-        
+        self.root.grid_rowconfigure([0, 2, 3], minsize=MINSIZE_ROW)
+        self.root.grid_rowconfigure([1], minsize=MINSIZE_ROW_WORD)
+
         self.lbl_title = self.AddLabel(self.title, 0, 0, col_span=4)
         self.lbl_title.config(font =(FC_TITLE_FONT, FC_TITLE_SIZE))
         self.lbl_title["fg"] = FC_TITLE_FG
-        self.lbl_word = self.AddLabel(self.title, 1, 1, col_span=2)
+        self.lbl_title["anchor"] = "w"
+
+        self.lbl_word = self.AddLabel("Hi!", 1, 1, col_span=2)
         self.lbl_word.config(font =(FC_WORD_FONT, FC_WORD_SIZE))
         self.lbl_word["fg"] = FC_WORD_FG
-        self.entry_answer = self.AddEntry(2, 1, col_span= 2, width=MINSIZE_COL*2)
-        self.entry_type = self.AddEntry(3, 1, col_span=2, width=MINSIZE_COL*2)
+        
+        self.entry_answer = self.AddEntry(2, 1, col_span= 2)
+        self.entry_answer.config(font =(FC_ENTRY_FONT, FC_ENTRY_SIZE))
+        self.entry_type = self.AddEntry(3, 1, col_span=2)
+        self.entry_type.config(font =(FC_ENTRY_FONT, FC_ENTRY_SIZE))
+        
         self.btn_submit = self.AddButton("Submit", self.submit, 4, 1)
         self.btn_show = self.AddButton("Show", self.show, 4, 2)
         self.btn_next = self.AddButton("Next >", self.next, 4, 3)
-        self.btn_prev = self.AddButton("< Prev", self.prev, 4, 0, col_span=1)
+        
+        self.frm_prev = self.AddFrame(4, 0, col_span=1)
+        self.frm_prev["width"] = MINSIZE_COL
+        self.frm_prev["bg"] = "grey"
+        #self.btn_prev = self.AddButton("< Prev", self.prev, 4, 0, col_span=1)
+        self.btn_prev = Button(self.frm_prev, text="< Prev", command=self.prev)
+        self.btn_prev.grid(row=0, column=0, sticky="nsew")
+        #self.btn_prev["justify"] = "center"
+        #self.btn_prev["anchor"] = "e"
+        
+        
         self.btn_close = self.AddButton("Close", self.Close, 5, 1, col_span=2)
 
     def load_dict(self):
