@@ -1,90 +1,153 @@
-from gui import *
+from tkinter import *
 from constants import *
-from database import *
+import database
 
-__all__ = ["DevWin", "App", "VerbPrefixTable"]
+#__all__ = ["DevWin", "App", "VerbPrefixTable"]
 
 #----------- UTILITY CLASS -------------
 #This just creates a window used in development
-class DevWin(Window):
-    def __init__(self, title, height, width, master):
-        super().__init__(title, height, width, master)
+class DevWin():
+    def __init__(self, master):
+        self.root = Toplevel(master)
+        self.root.title("Development Tests")
+        self.height = 400
+        self.width = 1000
+        self.root.geometry(f"{self.width}x{self.height}")
         self.output = ""
         self.setup_ui()
 
     def setup_ui(self):
-        self.output = self.AddTextBox(10, 120, 0, 0, col_span=3)
-        self.AddButton("Show Local Python Dictionary", self.print_python_dict, 1, 0)
-        self.AddButton("Show Loaded Python Dictionary", self.print_loaded_dict, 1, 1)
-        self.AddButton("Clear Output", self.clear_output, 1, 3)
-        self.AddButton("Save Dictionary", save_dict, 2, 0)
-        self.AddButton("Load Dictionary", load_dict, 2, 1)
+        self.output = Text(self.root, height=10, width=120)
+        self.output.grid(row=0, column=0, columnspan=3)
+
+        btn_local = Button(self.root, text="Show Local Python Dictionary", command=self.print_python_dict)
+        btn_local.grid(row=1, column=0, columnspan=1)
+        btn_loaded = Button(self.root, text="Show Loaded Python Dictionary", command=self.print_loaded_dict)
+        btn_loaded.grid(row=1, column=1, columnspan=1)        
+        btn_clear = Button(self.root, text="Clear Output", command=self.clear_output)
+        btn_clear.grid(row=1, column=3, columnspan=1)
+        btn_save = Button(self.root, text="Save Dictionary", command=database.save_dict)
+        btn_save.grid(row=2, column=0, columnspan=1)
+
+        btn_load = Button(self.root, text="Load Dictionary", command=database.load_dict)
+        btn_load.grid(row=2, column=1, columnspan=1)
 
     def print_python_dict(self):
         self.clear_output()
-        self.output.insert(END, get_dict())
+        self.output.insert(END, database.get_dict())
 
     def print_loaded_dict(self):
         self.clear_output()
-        self.output.insert(END, get_dict())
+        self.output.insert(END, database.get_dict())
 
     def clear_output(self):
         self.output.delete("1.0", END)
 
 #This is a window used in learning GUI formatting and layout
-class LayoutWin(Window):
-    def __init__(self, title, height, width, master):
-        super().__init__(title, height, width, master)
+class LayoutWin():
+    def __init__(self, master):
+        "Layout Window", 500, 500, 
+        self.root = Toplevel(master)
+        self.root.title("Layout Window")
+        self.height = 500
+        self.width = 500
+        self.root.geometry(f"{self.width}x{self.height}")
         self.frame = ""
+        self.rows = 5
+        self.cols = 3
+        self.subframes = [["" for j in range(self.cols)] for i in range(self.rows)]
         self.setup_ui()
 
     def setup_ui(self):
-        self.frame = Frame(master=self.root, relief=RAISED, borderwidth=4)
-        self.frame.grid(row=self.rows, column=self.cols, padx=5, pady=5)
+        self.frame = Frame(master=self.root, relief=RAISED, height=500, width=500, borderwidth=4)
+        self.frame.grid(row=0, column=0, padx=5, pady=5)
+        self.frame["bg"] = "blue"
+        for i in range(self.rows):
+            for j in range(self.cols):
+                self.subframes[i][j] = Frame(master=self.frame, relief=SUNKEN, height=10, width=10, borderwidth=2)
+                self.subframes[i][j].grid(row=i, column=j, padx=5, pady=5)
+                self.subframes[i][j]["bg"] = "red"
+                text = Label(self.subframes[i][j], text=f"Col: {j}, Row: {i}")
+                text["bg"] = "white"
+                text.grid(row=0, column=0, sticky="nsew")
+                #text.config(font =("Courier", 8))
 
 #----------- APP CLASS - INHERITS WINDOW CLASS AND ADDS THE LEARNING OPTIONS -----------
-class App(Window):
+class App():
     def __init__(self, title, height, width):
-        super().__init__(title, height, width)
+        self.app = Tk()
+        self.app.title(title)
+        self.app.geometry(f"{width}x{height}")
+        #Labels
+        self.lbl_title = None
+        self.lbl_tables = None
+        self.lbl_flash_cards = None
+        self.lbl_disclaimer = None
+        #Buttons
+        self.btn_verb_prefix_table = None
+        self.btn_verb_previx_flash_cards = None
+        #Dev
+        self.btn_dev = None
+        self.btn_layout = None
+
         self.setup_ui()  # Set up the specific UI elements
 
+    def Close(self):
+        self.app.destroy()
+
+    def Run(self):
+        self.app.mainloop()
+
     def setup_ui(self):
-        self.AddLabel("Klingon Hol Teacher's Aid", 0, 0, 2)
-        self.AddLabel("Tables", 1, 0)
-        self.AddLabel("Flash Cards", 1, 1)
-        self.AddButton("Verb Prefix Table", self.show_verb_prefix_table, 2, 0)
-        self.AddButton("Verb Prefix Flash Cards", self.show_verb_prefix_cards, 2, 1)
-        self.AddLabel("""Klingon language is taken from 'The Klingon Dictionary' by Marc Okrand.\n
+        self.lbl_title = Label(self.app, text="Klingon Hol Teacher's Aid")
+        self.lbl_title.grid(row=0, column=0, columnspan=2, sticky="nsew")
+        self.lbl_tables = Label(self.app, text="Tables")
+        self.lbl_tables.grid(row=1, column=0)
+        self.lbl_flash_cards = Label(self.app, text="Flash Cards")
+        self.lbl_flash_cards.grid(row=1, column=1)
+
+        self.btn_verb_previx_flash_cards = Button(self.app, text="Verb Prefix Table", command=self.show_verb_prefix_table)
+        self.btn_verb_previx_flash_cards.grid(row=2, column=0)
+        self.btn_verb_previx_flash_cards = Button(self.app, text="Verb Prefix Flash Cards", command=self.show_verb_prefix_cards)
+        self.btn_verb_previx_flash_cards.grid(row=2, column=1)
+        
+        self.lbl_disclaimer = Label(self.app, text="""Klingon language is taken from 'The Klingon Dictionary' by Marc Okrand.\n
                       This app provides various practice drills to help memorize things like verb prefixes and locations.\n
                       This app does NOT provide information on pronounciation or grammar.\n
                       Also this app does not include new additions to the language out side of 'The Klingon Dictionary'.\n
-                      To learn more about this beautiful langauge, please see 'The Klingon Dictionary' and other books by Marc Okrand.""", 3, 0, 2)
+                      To learn more about this beautiful langauge, please see 'The Klingon Dictionary' and other books by Marc Okrand.""")
+        self.lbl_disclaimer.grid(row=3, column=0, columnspan=2)
+
         if DEV:
-            self.AddButton("Show Development Window", self.show_dev_window, 4, 0)
+            self.btn_dev = Button(self.app, text="Show Development Window", command=self.show_dev_window)
+            self.btn_dev.grid(row=4, column=0)
+            self.btn_layout = Button(self.app, text="Show Layout Window", command=self.show_layout_window)
+            self.btn_layout.grid(row=4, column=1)
 
     def show_verb_prefix_table(self):
-        win_verb_prefix_test = VerbPrefixTable("Verb Prefix Test!", 400, 600, self.root)
-        win_verb_prefix_test.ShowModal()
-
+        VerbPrefixTable(self.app)
+        
     def show_verb_prefix_cards(self):
-        win_verb_prefix_test = FlashCards("Verb Pronoun Prefixes", self.root)
-        win_verb_prefix_test.ShowModal()
-
+        FlashCards("Verb Pronoun Prefixes", self.app)
+        
+    #Development Windows
     def show_dev_window(self):
-        dev_win = DevWin("Development Window", 400, 1000, self.root)
-        dev_win.ShowModal()
+        DevWin(self.app)
 
     def show_layout_window(self):
-        dev_win = LayoutWin("Layout Window", 500, 500, self.root)
-        dev_win.ShowModal()
+        LayoutWin(self.app)
     pass
 
 #--------- FLASH CARD CLASSES -----------
-class FlashCards(Window):
-    def __init__(self, title, master):
-        super().__init__("Flash Cards!", 500, 400, master)
+class FlashCards():
+    def __init__(self, subtitle, master):
+        self.root = Toplevel(master)
+        self.height = 500
+        self.width = 400
+        self.root.title("Flash Cards!")
+        self.root.geometry(f"{self.width}x{self.height}")
         self.rows, self.cols = (6, 3)
-        self.title = title
+        self.subtitle = subtitle
         self.lbl_title = None
         self.lbl_word = None
         self.entry_answer = None
@@ -100,45 +163,45 @@ class FlashCards(Window):
         self.load_dict()
         self.setup_ui()  # Set up the specific UI elements at start
 
+    def Close(self):
+        self.root.destroy()
+
     def setup_ui(self):
         # Set up the Grid sizes
-        MINSIZE_COL = 90
-        MINSIZE_ROW = 30
-        MINSIZE_ROW_WORD = 100
         self.root.resizable(width=False, height=False)
-        self.root.grid_columnconfigure([0, 1, 2, 3, 4, 5], minsize=MINSIZE_COL)
-        self.root.grid_rowconfigure([0, 2, 3], minsize=MINSIZE_ROW)
-        self.root.grid_rowconfigure([1], minsize=MINSIZE_ROW_WORD)
+        self.root.grid_columnconfigure([0, 1, 2, 3, 4, 5], minsize=FC_MINSIZE_COL)
+        self.root.grid_rowconfigure([0, 2, 3], minsize=FC_MINSIZE_ROW)
+        self.root.grid_rowconfigure([1], minsize=FC_MINSIZE_ROW_WORD)
 
-        self.lbl_title = self.AddLabel(self.title, 0, 0, col_span=4)
+        self.lbl_title = Label(self.root, text=self.subtitle)
+        self.lbl_title.grid(row=0, column=0, columnspan=4, sticky="nsew")
         self.lbl_title.config(font =(FC_TITLE_FONT, FC_TITLE_SIZE))
         self.lbl_title["fg"] = FC_TITLE_FG
         self.lbl_title["anchor"] = "w"
 
-        self.lbl_word = self.AddLabel("Hi!", 1, 1, col_span=2)
+        self.lbl_word = Label(self.root, text="Hi!")
+        self.lbl_word.grid(row=1, column=1, columnspan=2)
         self.lbl_word.config(font =(FC_WORD_FONT, FC_WORD_SIZE))
         self.lbl_word["fg"] = FC_WORD_FG
         
-        self.entry_answer = self.AddEntry(2, 1, col_span= 2)
+        self.entry_answer = Entry(self.root, relief="sunken", width=10)
+        self.entry_answer.grid(row=2, column=1, columnspan=2)
         self.entry_answer.config(font =(FC_ENTRY_FONT, FC_ENTRY_SIZE))
-        self.entry_type = self.AddEntry(3, 1, col_span=2)
+        self.entry_type = Entry(self.root, relief="sunken", width=10)
+        self.entry_type.grid(row=3, column=1, columnspan=2)
         self.entry_type.config(font =(FC_ENTRY_FONT, FC_ENTRY_SIZE))
         
-        self.btn_submit = self.AddButton("Submit", self.submit, 4, 1)
-        self.btn_show = self.AddButton("Show", self.show, 4, 2)
-        self.btn_next = self.AddButton("Next >", self.next, 4, 3)
+        self.btn_submit = Button(self.root, text="Submit", command=self.submit)
+        self.btn_submit.grid(row=4, column=1, columnspan=1, sticky="nsew")
+        self.btn_show = Button(self.root, text="Show", command=self.show)
+        self.btn_show.grid(row=4, column=2, columnspan=1, sticky="nsew")       
+        self.btn_next = Button(self.root, text="Next >", command=self.next)
+        self.btn_next.grid(row=4, column=3, columnspan=1, sticky="nsew")
+        self.btn_prev = Button(self.root, text="< Prev", command=self.prev)
+        self.btn_prev.grid(row=4, column=0, columnspan=1, sticky="nsew") 
         
-        self.frm_prev = self.AddFrame(4, 0, col_span=1)
-        self.frm_prev["width"] = MINSIZE_COL
-        self.frm_prev["bg"] = "grey"
-        #self.btn_prev = self.AddButton("< Prev", self.prev, 4, 0, col_span=1)
-        self.btn_prev = Button(self.frm_prev, text="< Prev", command=self.prev)
-        self.btn_prev.grid(row=0, column=0, sticky="nsew")
-        #self.btn_prev["justify"] = "center"
-        #self.btn_prev["anchor"] = "e"
-        
-        
-        self.btn_close = self.AddButton("Close", self.Close, 5, 1, col_span=2)
+        self.btn_close = Button(self.root, text="Close", command=self.Close)
+        self.btn_close.grid(row=5, column=1, columnspan=2, sticky="nsew") 
 
     def load_dict(self):
         print("Load Dictionary")
@@ -155,12 +218,14 @@ class FlashCards(Window):
     def prev(self):
         print("Prev")
 
-    
-
 #---------- TABLE TEST CLASSES ----------
-class VerbPrefixTable(Window):
-    def __init__(self, title, height, width, master):
-        super().__init__(title, height, width, master)
+class VerbPrefixTable():
+    def __init__(self, master):
+        self.root = Toplevel(master)
+        self.height = 400
+        self.width = 600
+        self.root.title("Verb Prefix Table!")
+        self.root.geometry(f"{self.width}x{self.height}")
         self.rows, self.cols = (6, 7)
         self.col_labels = [""]*(self.cols + 1)
         self.row_labels = [""]*(self.rows + 1)
@@ -175,55 +240,55 @@ class VerbPrefixTable(Window):
         self.set_null() #I-me, you-you, I-us etc are NOT VALID for a prefix ("---"), this is NOT the same as 0 for the combination does not have a prefix.
 
     def setup_ui(self):
-        ENTRY_WIDTH=4 #This sets the width of all all the entry windows.
-        #Set the Grid to be of consistent height and width.
-        MINSIZE_C0 = 120
-        MINSIZE_C = 60
-        MINSIZE_R0 = 62
-        MINSIZE_R = 40
-        self.root.grid_columnconfigure([0], minsize=MINSIZE_C0)
-        self.root.grid_columnconfigure([1, 2, 3, 4, 5, 6, 7], minsize=MINSIZE_C)
-        self.root.grid_rowconfigure(0, minsize=MINSIZE_R0)
-        self.root.grid_rowconfigure([1, 2, 3, 4, 5, 6], minsize=MINSIZE_R)
+        self.root.grid_columnconfigure([0], minsize=VP_MINSIZE_COL_0)
+        self.root.grid_columnconfigure([1, 2, 3, 4, 5, 6, 7], minsize=VP_MINSIZE_COL)
+        self.root.grid_rowconfigure(0, minsize=VP_MINSIZE_ROW_0)
+        self.root.grid_rowconfigure([1, 2, 3, 4, 5, 6], minsize=VP_MINSIZE_ROW)
 
         # Column Names
-        self.col_labels[0] = self.AddLabel("OBJECT", 0, 0)
-        self.col_labels[1] = self.AddLabel("none", 0, 1)
-        self.col_labels[2] = self.AddLabel("me", 0, 2)
-        self.col_labels[3] = self.AddLabel("you", 0, 3)
-        self.col_labels[4] = self.AddLabel("him/\nher/\nit", 0, 4)
-        self.col_labels[5] = self.AddLabel("us", 0, 5)
-        self.col_labels[6] = self.AddLabel("you\nplural", 0, 6)
-        self.col_labels[7]= self.AddLabel("them", 0, 7)
+        self.col_labels[0] = Label(self.root, text="OBJECT")
+        self.col_labels[1] = Label(self.root, text="none")
+        self.col_labels[2] = Label(self.root, text="me")
+        self.col_labels[3] = Label(self.root, text="you")
+        self.col_labels[4] = Label(self.root, text="him/\nher/\nit")
+        self.col_labels[5] = Label(self.root, text="us")
+        self.col_labels[6] = Label(self.root, text="you\nplural")
+        self.col_labels[7] = Label(self.root, text="them")
         #Set colors and other attributes if needed
         for i in range(self.cols + 1):
-            self.col_labels[i].config(font =(VP_H_FONT, VP_H_FONT_SIZE))
-            self.col_labels[i]["fg"] = VP_C_H_FG
-            self.col_labels[i]["bg"] = VP_C_H_BG
+            self.col_labels[i].grid(row=0, column=i)
+            self.col_labels[i].config(font =(VP_ALL_HDR_FONT, VP_ALL_HDR_FONT_SIZE))
+            self.col_labels[i]["fg"] = VP_COL_HDR_FG
+            self.col_labels[i]["bg"] = VP_COL_HDR_BG
 
         # Rows Names
-        self.row_labels[0] = self.AddLabel("SUBJECT", 1, 0)
-        self.row_labels[1] = self.AddLabel("I", 2, 0)
-        self.row_labels[2] = self.AddLabel("you", 3, 0)
-        self.row_labels[3] = self.AddLabel("he/she/it", 4, 0)
-        self.row_labels[4] = self.AddLabel("we", 5, 0)
-        self.row_labels[5] = self.AddLabel("you(plural)", 6, 0)
-        self.row_labels[6] = self.AddLabel("they", 7, 0)
+        self.row_labels[0] = Label(self.root, text="SUBJECT")
+        self.row_labels[1] = Label(self.root, text="I")
+        self.row_labels[2] = Label(self.root, text="you")
+        self.row_labels[3] = Label(self.root, text="he/she/it")
+        self.row_labels[4] = Label(self.root, text="we")
+        self.row_labels[5] = Label(self.root, text="you(plural)")
+        self.row_labels[6] = Label(self.root, text="they")
         for j in range(self.rows + 1):
-            self.row_labels[j].config(font =(VP_H_FONT, VP_H_FONT_SIZE))
-            self.row_labels[j]["fg"] = VP_R_H_FG
-            self.row_labels[j]["bg"] = VP_R_H_BG
+            self.row_labels[j].grid(row=j, column=0)
+            self.row_labels[j].config(font =(VP_ALL_HDR_FONT, VP_ALL_HDR_FONT_SIZE))
+            self.row_labels[j]["fg"] = VP_ROW_HDR_FG
+            self.row_labels[j]["bg"] = VP_ROW_HDR_BG
 
         #Set up all our entries
         for i in range(0, self.rows):
             for j in range (0, self.cols):
-                self.entry_box[i][j] = self.AddEntry(i+2, j+1, width=ENTRY_WIDTH)
-                self.entry_box[i][j].config(font =(VP_C_FONT, VP_C_FONT_SIZE))
+                self.entry_box[i][j] = Entry(self.root, relief="sunken", width=VP_ENTRY_WIDTH)
+                self.entry_box[i][j].grid(row=i+2, column=j+1)
+                self.entry_box[i][j].config(font =(VP_FONT, VP_FONT_SIZE))
     
         #Add Buttons to show answers for study and referenece, a clear button, and a submit test button.
-        self.btn_show_key = self.AddButton("moHaq yIcha': Show prefixes!", self.show_key, 8, 0, col_span=4)
-        self.btn_clear = self.AddButton("wa'chaw yIteq: Clear table!", self.clear, 8, 4, col_span=4)
-        self.btn_score_test = self.AddButton("'el: Submit!", self.score_test, 9, 0, col_span=8)
+        self.btn_show_key = Button(self.root, text="moHaq yIcha': Show prefixes!", command=self.show_key)
+        self.btn_show_key.grid(row=8, column=0, columnspan=4)
+        self.btn_clear = Button(self.root, text="wa'chaw yIteq: Clear table!", command=self.clear)
+        self.btn_clear.grid(row=8, column=4, columnspan=4)
+        self.btn_score_test = Button(self.root, text="'el: Submit!", command=self.score_test)
+        self.btn_score_test.grid(row=9, column=0, columnspan=8)
 
     def set_answer_key(self):
         self.answer_key[0][0] = "jI-"
@@ -275,7 +340,7 @@ class VerbPrefixTable(Window):
                 if self.answer_key[i][j] == "---":
                     self.entry_box[i][j].delete(0, END) #Should not be needed, but just in case.
                     self.entry_box[i][j].insert(0, "---")
-                    self.entry_box[i][j]["bg"] = VP_CELL_BG_REF
+                    self.entry_box[i][j]["bg"] = VP_BG_REF
                     self.entry_box[i][j].config(state="disabled") #Disabled so the user cannot change these, kept as boxes, not labels as that is simply cleaner.   
 
     # Button functions
@@ -286,9 +351,9 @@ class VerbPrefixTable(Window):
             for j in range (0, 7):
                 #We do check the invalid combinations as they are disabled and cannot change.
                 if self.entry_box[i][j].get() == self.answer_key[i][j]:
-                    self.entry_box[i][j]["bg"] = VP_CELL_BG_CORRECT
+                    self.entry_box[i][j]["bg"] = VP_BG_CORRECT
                 else:
-                    self.entry_box[i][j]["bg"] = VP_CELL_BG_WRONG
+                    self.entry_box[i][j]["bg"] = VP_BG_WRONG
                     qapla = False
         if qapla:
             print("Qapla'!")
@@ -303,7 +368,7 @@ class VerbPrefixTable(Window):
                 #We do not insert the invalid combinations, they are set at the window intialization and never changed.
                 if self.entry_box[i][j].get() != "---":
                     self.entry_box[i][j].insert(0, self.answer_key[i][j]) #Enter the information from our answer key.
-                    self.entry_box[i][j]["bg"] = VP_CELL_BG_REF #Shows this is for reference.
+                    self.entry_box[i][j]["bg"] = VP_BG_REF #Shows this is for reference.
 
     def clear(self):
          self.btn_score_test.config(state="active") #We enable the button to submit as the table is cleared.
@@ -312,4 +377,4 @@ class VerbPrefixTable(Window):
                 #We do not clear the invalid combination boxes.
                 if self.entry_box[i][j].get() != "---":
                     self.entry_box[i][j].delete(0, END) #Clear existing information, if any.
-                    self.entry_box[i][j]["bg"] = VP_CELL_BG_ENTRY #Clear the background if the user ran a test.
+                    self.entry_box[i][j]["bg"] = VP_BG_ENTRY #Clear the background if the user ran a test.
