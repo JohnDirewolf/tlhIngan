@@ -130,7 +130,7 @@ class App():
         VerbPrefixTable(self.app)
         
     def show_verb_prefix_cards(self):
-        FlashCards("Verb Pronoun Prefixes", self.app)
+        FlashCards(self.app, "Verb Pronoun Prefixes")
         
     #Development Windows
     def show_dev_window(self):
@@ -141,108 +141,159 @@ class App():
     pass
 
 #--------- FLASH CARD CLASSES -----------
+def FlashCardSubFrame(parent, row, column, height, width, columnspan=1):
+    frm = Frame(parent, relief=FLAT, height=height, width=width, borderwidth=0)
+    frm.grid(row=row, column=column, columnspan=columnspan, padx=0, pady=0)
+    frm.grid_columnconfigure(0, weight=1)
+    frm.grid_rowconfigure(0, weight=1)
+    frm.grid_propagate(False)
+    return frm
+
 class FlashCards():
-    def __init__(self, subtitle, master):
+    def __init__(self, master, subtitle):
         #Setup of Window
         self.root = Toplevel(master)
-        self.subtitle = subtitle
-        self.height = 520
-        self.width = 520
+        self.mySubtitle = subtitle
+        self.height = 510
+        self.width = 510
         self.root.title("Flash Cards!")
         self.root.geometry(f"{self.width}x{self.height}")
         #Widget variables
         self.rows, self.cols = (6, 3)
         self.frm_master = None
-        self.frm_submaster = None
-        self.lbl_subtitle = None
-        self.lbl_word = None
-        self.entry_answer = None
-        self.entry_type = None
-        self.btn_submit = None
-        self.frm_submit = None
-        self.btn_show = None
-        self.btn_next = None
-        self.btn_prev = None
-        self.frm_prev = None
-        self.btn_close = None 
+        #Objects are a array of two variables, 0 is the frame, 1 is the widget.
+        self.subtitle = [None, None]
+        self.word = [None, None]
+        self.lbl_answer = [None, None]
+        self.entry_answer = [None, None]
+        self.lbl_type = [None, None]
+        self.entry_type = [None, None]
+        self.submit = [None, None]
+        self.show = [None, None]
+        self.next = [None, None]
+        self.prev = [None, None]
+        self.close = [None, None]
         self.klingon = {}
-        self.load_dict()
+        self.cmd_load_dict()
         self.setup_ui()  # Set up the specific UI elements at start
-
-    def Close(self):
-        self.root.destroy()
 
     def setup_ui(self):
         # Set up the Grid sizes
         self.root.resizable(width=False, height=False)
         
-        #Master Frame
-        self.frame_master = Frame(self.root, relief=RAISED, height=500, width=500, borderwidth=5)
-        self.frame_master.grid(row=0, column=0, padx=10, pady=10)
-        self.frame_master["bg"] = "blue"
-        self.frame_master.grid_columnconfigure([0, 1, 2, 3], minsize=FC_MINSIZE_COL)
-        self.frame_master.grid_rowconfigure([0, 2, 3, 4, 5], minsize=FC_MINSIZE_ROW)
-        self.frame_master.grid_rowconfigure([1], minsize=FC_MINSIZE_ROW * 4)
-        #setting the grid propogation so that sub widges do not change the master frame sizes.
-        self.frame_master.grid_propagate(False)
+        #Master Frame - gives a nice outer raised boarder.
+        self.frm_master = Frame(self.root, relief=RAISED, height=500, width=500, borderwidth=5)
+        self.frm_master.grid(row=0, column=0, padx=10, pady=10)
 
-        # For our grid, labels and other text widgets will automatically resize for the text within. So we just let them clamp perfectly on their text.
-        # We use a subframe for each label to actually create the cell the text is in so we can size and position more cleanly.
+        # Labels and other text widgets will automatically resize for the text within. So we don't fight this, we just let them clamp perfectly on their text.
+        # Each label/text Widget has a parent frame to create the cell and then the text Widget can be positioned more cleanly.
         # Weight is added to the sub-grid to enable sticky for postioning.
 
-        self.frm_subtitle = Frame(self.frame_master, relief=FLAT, height=FC_MINSIZE_ROW, width=FC_MINSIZE_COL*4, borderwidth=0)
-        self.frm_subtitle.grid(row=0, column=0, columnspan=4, padx=5, pady=5)
-        self.frm_subtitle.grid_columnconfigure(0, weight=1)
-        self.frm_subtitle.grid_rowconfigure(0, weight=1)
-        self.frm_subtitle.grid_propagate(False)
-        self.frm_subtitle["bg"] = "red"
-        
-        self.lbl_subtitle = Label(self.frm_subtitle, text=self.subtitle)
-        self.lbl_subtitle.grid(row=0, column=0, padx=0, pady=0, sticky="")
-        self.lbl_subtitle.config(font =(FC_TITLE_FONT, FC_TITLE_SIZE))
-        self.lbl_subtitle["fg"] = FC_FG
-        self.lbl_subtitle["bg"] = FC_BG
+        self.subtitle[0] = FlashCardSubFrame(self.frm_master, 0, 0, FC_MINSIZE_ROW, FC_MINSIZE_COL*4, columnspan=4)
+        self.subtitle[1] = Label(self.subtitle[0], text=self.mySubtitle)
+        self.subtitle[1].grid(sticky="w")
+        self.subtitle[1].config(font =(FC_TITLE_FONT, FC_TITLE_SIZE))
+        self.subtitle[1]["fg"] = FC_FG
+        #self.subtitle[1]["bg"] = FC_BG
 
-        '''
-        self.lbl_word = Label(self.root, text="Hi!")
-        self.lbl_word.grid(row=1, column=1, columnspan=2)
-        self.lbl_word.config(font =(FC_WORD_FONT, FC_WORD_SIZE))
-        self.lbl_word["fg"] = FC_WORD_FG
-        
-        self.entry_answer = Entry(self.root, relief="sunken", width=10)
-        self.entry_answer.grid(row=2, column=1, columnspan=2)
-        self.entry_answer.config(font =(FC_ENTRY_FONT, FC_ENTRY_SIZE))
-        self.entry_type = Entry(self.root, relief="sunken", width=10)
-        self.entry_type.grid(row=3, column=1, columnspan=2)
-        self.entry_type.config(font =(FC_ENTRY_FONT, FC_ENTRY_SIZE))
-        
-        self.btn_submit = Button(self.root, text="Submit", command=self.submit)
-        self.btn_submit.grid(row=4, column=1, columnspan=1, sticky="nsew")
-        self.btn_show = Button(self.root, text="Show", command=self.show)
-        self.btn_show.grid(row=4, column=2, columnspan=1, sticky="nsew")       
-        self.btn_next = Button(self.root, text="Next >", command=self.next)
-        self.btn_next.grid(row=4, column=3, columnspan=1, sticky="nsew")
-        self.btn_prev = Button(self.root, text="< Prev", command=self.prev)
-        self.btn_prev.grid(row=4, column=0, columnspan=1, sticky="nsew") 
-        
-        self.btn_close = Button(self.root, text="Close", command=self.Close)
-        self.btn_close.grid(row=5, column=1, columnspan=2, sticky="nsew") 
-        '''
+        self.word[0] = FlashCardSubFrame(self.frm_master, 1, 0, FC_MINSIZE_ROW*2, FC_MINSIZE_COL*4, columnspan=4)
+        self.word[1] = Label(self.word[0], text="Qapla'!")
+        self.word[1].grid(sticky="")
+        self.word[1].config(font =(FC_WORD_FONT, FC_WORD_SIZE))
+        self.word[1]["fg"] = FC_FG
+        #self.word[1]["bg"] = FC_BG
 
-    def load_dict(self):
+        self.lbl_answer[0] = FlashCardSubFrame(self.frm_master, 2, 0, FC_MINSIZE_ROW, FC_MINSIZE_COL)
+        #self.lbl_answer[0]["bg"] = "orange"
+        #This will need to know if we are translating English to Klingon or DIvI' mugh tlhIngan
+        self.lbl_answer[1] = Label(self.lbl_answer[0], text="English:")
+        self.lbl_answer[1].grid(sticky="")
+        self.lbl_answer[1].config(font =(FC_ENTRY_FONT, FC_ENTRY_SIZE))
+        self.lbl_answer[1]["fg"] = FC_FG
+        #self.lbl_answer[1]["bg"] = FC_BG
+
+        self.entry_answer[0] = FlashCardSubFrame(self.frm_master, 2, 1, FC_MINSIZE_ROW, FC_MINSIZE_COL*3, columnspan=3)
+        #self.entry_answer[0]["bg"] = "yellow"
+        self.entry_answer[1] = Entry(self.entry_answer[0], relief=SUNKEN, borderwidth=3)
+        self.entry_answer[1].grid(sticky="NSEW")
+        self.entry_answer[1].config(font =(FC_ENTRY_FONT, FC_ENTRY_SIZE))
+        self.entry_answer[1]["fg"] = FC_FG
+        self.entry_answer[1]["bg"] = FC_BG
+
+        self.lbl_type[0] = FlashCardSubFrame(self.frm_master, 3, 0, FC_MINSIZE_ROW, FC_MINSIZE_COL)
+        #self.lbl_type[0]["bg"] = "green"
+        #This may or may not be shown if Type is important or not.
+        self.lbl_type[1] = Label(self.lbl_type[0], text="Type:")
+        self.lbl_type[1].grid(sticky="")
+        self.lbl_type[1].config(font =(FC_ENTRY_FONT, FC_ENTRY_SIZE))
+        self.lbl_type[1]["fg"] = FC_FG
+        #self.lbl_type[1]["bg"] = FC_BG
+        
+        self.entry_type[0] = FlashCardSubFrame(self.frm_master, 3, 1, FC_MINSIZE_ROW, FC_MINSIZE_COL*3, columnspan=3)
+        #self.entry_type[0]["bg"] = "lightblue"
+        self.entry_type[1] = Entry(self.entry_type[0], relief=SUNKEN, borderwidth=3)
+        self.entry_type[1].grid(sticky="NSEW")
+        self.entry_type[1].config(font =(FC_ENTRY_FONT, FC_ENTRY_SIZE))
+        self.entry_type[1]["fg"] = FC_FG
+        #self.entry_type[1]["bg"] = FC_BG
+
+        self.prev[0] = FlashCardSubFrame(self.frm_master, 4, 0, FC_MINSIZE_ROW, FC_MINSIZE_COL)
+        self.prev[0]["bg"] = "purple"
+        self.prev[1] = Button(self.prev[0], text="< Prev", command=self.cmd_prev, width=FC_MINSIZE_COL-20, height=FC_MINSIZE_ROW-10)
+        self.prev[1].grid(sticky="")
+        self.prev[1].config(font =(FC_BTN_FONT, FC_BTN_SIZE))
+        self.prev[1]["fg"] = FC_FG
+        self.prev[1]["bg"] = FC_BG
+
+        self.submit[0] = FlashCardSubFrame(self.frm_master, 4, 1, FC_MINSIZE_ROW, width=FC_MINSIZE_COL)
+        self.submit[0]["bg"] = "red"
+        self.submit[1] = Button(self.submit[0], text="Submit", command=self.cmd_submit, width=FC_MINSIZE_COL-20, height=FC_MINSIZE_ROW-10)
+        self.submit[1].grid(sticky="")
+        self.submit[1].config(font =(FC_BTN_FONT, FC_BTN_SIZE))
+        self.submit[1]["fg"] = FC_FG
+        self.submit[1]["bg"] = FC_BG
+
+        self.show[0] = FlashCardSubFrame(self.frm_master, 4, 2, FC_MINSIZE_ROW, width=FC_MINSIZE_COL)
+        self.show[0]["bg"] = "orange"
+        self.show[1] = Button(self.show[0], text="Show", command=self.cmd_show, width=FC_MINSIZE_COL-20, height=FC_MINSIZE_ROW-10)
+        self.show[1].grid(sticky="")
+        self.show[1].config(font =(FC_BTN_FONT, FC_BTN_SIZE))
+        self.show[1]["fg"] = FC_FG
+        self.show[1]["bg"] = FC_BG
+
+        self.next[0] = FlashCardSubFrame(self.frm_master, 4, 3, FC_MINSIZE_ROW, width=FC_MINSIZE_COL)
+        self.next[0]["bg"] = "yellow"
+        self.next[1] = Button(self.next[0], text="Next >", command=self.cmd_next, width=FC_MINSIZE_COL-20, height=FC_MINSIZE_ROW-10)
+        self.next[1].grid(sticky="")
+        self.next[1].config(font =(FC_BTN_FONT, FC_BTN_SIZE))
+        self.next[1]["fg"] = FC_FG
+        self.next[1]["bg"] = FC_BG
+
+        self.close[0] = FlashCardSubFrame(self.frm_master, 5, 1, FC_MINSIZE_ROW, width=FC_MINSIZE_COL*2, columnspan=2)
+        self.close[0]["bg"] = "green"
+        self.close[1] = Button(self.close[0], text="Close", command=self.cmd_close, width=FC_MINSIZE_COL-20, height=FC_MINSIZE_ROW-10)
+        self.close[1].grid(sticky="")
+        self.close[1].config(font =(FC_BTN_FONT, FC_BTN_SIZE))
+        self.close[1]["fg"] = FC_FG
+        self.close[1]["bg"] = FC_BG
+
+    def cmd_load_dict(self):
         print("Load Dictionary")
 
-    def submit(self):
+    def cmd_submit(self):
         print("Submit")
 
-    def show(self):
+    def cmd_show(self):
         print("Show")
     
-    def next(self):
+    def cmd_next(self):
         print("Next")
 
-    def prev(self):
+    def cmd_prev(self):
         print("Prev")
+
+    def cmd_close(self):
+        self.root.destroy()
 
 #---------- TABLE TEST CLASSES ----------
 class VerbPrefixTable():

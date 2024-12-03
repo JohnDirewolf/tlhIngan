@@ -26,7 +26,7 @@ VP_FONT_SIZE = 12
 #Flash Card Constants.
 #Set the Grid to be of consistent height and width.
 FC_MINSIZE_COL = 120
-FC_MINSIZE_ROW = 31
+FC_MINSIZE_ROW = 30
 #Flash Card Colors
 FC_FG = "black"
 FC_BG = "white"
@@ -36,7 +36,9 @@ FC_WORD_SIZE = 28
 FC_TITLE_FONT = "Courier"
 FC_TITLE_SIZE = 10
 FC_ENTRY_FONT = "Courier"
-FC_ENTRY_SIZE = 14
+FC_ENTRY_SIZE = 10
+FC_BTN_FONT = "Courier"
+FC_BTN_SIZE = 10
 
 #Word Types
 VERB_PREFIXES = "verb_prefixes"
