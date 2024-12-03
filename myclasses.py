@@ -62,15 +62,17 @@ class LayoutWin():
         self.frame = Frame(master=self.root, relief=RAISED, height=500, width=500, borderwidth=4)
         self.frame.grid(row=0, column=0, padx=5, pady=5)
         self.frame["bg"] = "blue"
+        self.frame.grid_propagate(False)
         for i in range(self.rows):
             for j in range(self.cols):
-                self.subframes[i][j] = Frame(master=self.frame, relief=SUNKEN, height=10, width=10, borderwidth=2)
+                self.subframes[i][j] = Frame(master=self.frame, relief=SUNKEN, height=50, width=50, borderwidth=2)
                 self.subframes[i][j].grid(row=i, column=j, padx=5, pady=5)
                 self.subframes[i][j]["bg"] = "red"
-                text = Label(self.subframes[i][j], text=f"Col: {j}, Row: {i}")
+                text = Label(self.subframes[i][j], text=f"Col: {j}, Row: {i}", height=2, width=2)
                 text["bg"] = "white"
                 text.grid(row=0, column=0, sticky="nsew")
                 #text.config(font =("Courier", 8))
+
 
 #----------- APP CLASS - INHERITS WINDOW CLASS AND ADDS THE LEARNING OPTIONS -----------
 class App():
@@ -141,14 +143,18 @@ class App():
 #--------- FLASH CARD CLASSES -----------
 class FlashCards():
     def __init__(self, subtitle, master):
+        #Setup of Window
         self.root = Toplevel(master)
-        self.height = 500
-        self.width = 400
+        self.subtitle = subtitle
+        self.height = 520
+        self.width = 520
         self.root.title("Flash Cards!")
         self.root.geometry(f"{self.width}x{self.height}")
+        #Widget variables
         self.rows, self.cols = (6, 3)
-        self.subtitle = subtitle
-        self.lbl_title = None
+        self.frm_master = None
+        self.frm_submaster = None
+        self.lbl_subtitle = None
         self.lbl_word = None
         self.entry_answer = None
         self.entry_type = None
@@ -169,16 +175,35 @@ class FlashCards():
     def setup_ui(self):
         # Set up the Grid sizes
         self.root.resizable(width=False, height=False)
-        self.root.grid_columnconfigure([0, 1, 2, 3, 4, 5], minsize=FC_MINSIZE_COL)
-        self.root.grid_rowconfigure([0, 2, 3], minsize=FC_MINSIZE_ROW)
-        self.root.grid_rowconfigure([1], minsize=FC_MINSIZE_ROW_WORD)
+        
+        #Master Frame
+        self.frame_master = Frame(self.root, relief=RAISED, height=500, width=500, borderwidth=5)
+        self.frame_master.grid(row=0, column=0, padx=10, pady=10)
+        self.frame_master["bg"] = "blue"
+        self.frame_master.grid_columnconfigure([0, 1, 2, 3], minsize=FC_MINSIZE_COL)
+        self.frame_master.grid_rowconfigure([0, 2, 3, 4, 5], minsize=FC_MINSIZE_ROW)
+        self.frame_master.grid_rowconfigure([1], minsize=FC_MINSIZE_ROW * 4)
+        #setting the grid propogation so that sub widges do not change the master frame sizes.
+        self.frame_master.grid_propagate(False)
 
-        self.lbl_title = Label(self.root, text=self.subtitle)
-        self.lbl_title.grid(row=0, column=0, columnspan=4, sticky="nsew")
-        self.lbl_title.config(font =(FC_TITLE_FONT, FC_TITLE_SIZE))
-        self.lbl_title["fg"] = FC_TITLE_FG
-        self.lbl_title["anchor"] = "w"
+        # For our grid, labels and other text widgets will automatically resize for the text within. So we just let them clamp perfectly on their text.
+        # We use a subframe for each label to actually create the cell the text is in so we can size and position more cleanly.
+        # Weight is added to the sub-grid to enable sticky for postioning.
 
+        self.frm_subtitle = Frame(self.frame_master, relief=FLAT, height=FC_MINSIZE_ROW, width=FC_MINSIZE_COL*4, borderwidth=0)
+        self.frm_subtitle.grid(row=0, column=0, columnspan=4, padx=5, pady=5)
+        self.frm_subtitle.grid_columnconfigure(0, weight=1)
+        self.frm_subtitle.grid_rowconfigure(0, weight=1)
+        self.frm_subtitle.grid_propagate(False)
+        self.frm_subtitle["bg"] = "red"
+        
+        self.lbl_subtitle = Label(self.frm_subtitle, text=self.subtitle)
+        self.lbl_subtitle.grid(row=0, column=0, padx=0, pady=0, sticky="")
+        self.lbl_subtitle.config(font =(FC_TITLE_FONT, FC_TITLE_SIZE))
+        self.lbl_subtitle["fg"] = FC_FG
+        self.lbl_subtitle["bg"] = FC_BG
+
+        '''
         self.lbl_word = Label(self.root, text="Hi!")
         self.lbl_word.grid(row=1, column=1, columnspan=2)
         self.lbl_word.config(font =(FC_WORD_FONT, FC_WORD_SIZE))
@@ -202,6 +227,7 @@ class FlashCards():
         
         self.btn_close = Button(self.root, text="Close", command=self.Close)
         self.btn_close.grid(row=5, column=1, columnspan=2, sticky="nsew") 
+        '''
 
     def load_dict(self):
         print("Load Dictionary")

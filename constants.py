@@ -25,17 +25,16 @@ VP_FONT_SIZE = 12
 
 #Flash Card Constants.
 #Set the Grid to be of consistent height and width.
-FC_MINSIZE_COL = 90
-FC_MINSIZE_ROW = 30
-FC_MINSIZE_ROW_WORD = 100
+FC_MINSIZE_COL = 120
+FC_MINSIZE_ROW = 31
 #Flash Card Colors
-FC_TITLE_FG = "black"
-FC_WORD_FG = "black"
+FC_FG = "black"
+FC_BG = "white"
 #Flash Card Font
 FC_WORD_FONT = "Arial"
 FC_WORD_SIZE = 28
 FC_TITLE_FONT = "Courier"
-FC_TITLE_SIZE = 14
+FC_TITLE_SIZE = 10
 FC_ENTRY_FONT = "Courier"
 FC_ENTRY_SIZE = 14
 
