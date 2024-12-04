@@ -1,4 +1,16 @@
 DEV = True
+#App Constants
+APP_MINSIZE_ROW = 30
+APP_MINSIZE_COL = 300
+#App Colors
+APP_FG = "black"
+#App Fonts
+APP_TITLE_FONT = "Arial"
+APP_TITLE_SIZE = 12
+APP_HEADER_FONT = "Times New Roman"
+APP_HEADER_SIZE = 12
+APP_DISCLAIMER_FONT = "Courier"
+APP_DISCLAIMER_SIZE = 10
 
 # Verb Prefix Table Constants
 VP_ENTRY_WIDTH=4 #This sets the width of all all the entry windows.

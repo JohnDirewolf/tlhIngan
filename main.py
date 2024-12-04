@@ -10,7 +10,7 @@ def main():
     #Load the database
     database.load_dict()
     #Create our main app window
-    app = myclasses.App("tlhIngan Hol ghojmoHwI' boQ", 400, 900)
+    app = myclasses.App()
     # Start the GUI event loop
     app.Run()
 

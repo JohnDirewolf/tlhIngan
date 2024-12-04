@@ -24,3 +24,6 @@ def load_dict():
 
 def get_dict():
     return _klingon_dict.copy()
+
+def get_dict_type(dict_type):
+    return _klingon_dict[dict_type].copy()
