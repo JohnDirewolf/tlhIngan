@@ -19,7 +19,7 @@ class App():
     def __init__(self):
         self.app = Tk()
         self.app.title("tlhIngan Hol ghojmoHwI' boQ")
-        self.height = 420
+        self.height = 360
         self.width = 930
         self.app.geometry(f"{self.width}x{self.height}")
         #Master Frame, is the master frame of the window, gives a nice border.
@@ -40,9 +40,10 @@ class App():
         self.fc_rlocation = [None, None]
         #Radio
         #radio_button1 = tk.Radiobutton(window, text="Option 1", variable=selected_value, value="option1")
+        self.fc_prime_lang = StringVar(value=KLINGON)
         self.rdo = None
-        self.rdo_english = None
-        self.rdo_klingon = None
+        self.rdo_english = [None, None]
+        self.rdo_klingon = [None, None]
 
         self.setup_ui()  # Set up the specific UI elements
 
@@ -58,10 +59,10 @@ class App():
         #Master Frame - gives a nice outer raised boarder.
         self.frm_master = Frame(self.app, relief=RIDGE, height=400, width=900, borderwidth=5)
         self.frm_master.grid(row=0, column=0, padx=10, pady=10)
-        self.frm_master["bg"] = "red"
+        #self.frm_master["bg"] = "red"
         
         self.title[0] = SubFrame(self.frm_master, 0, 0, APP_MINSIZE_ROW, APP_MINSIZE_COL*3, columnspan=3)
-        self.title[0]["bg"] = "purple"
+        #self.title[0]["bg"] = "purple"
         self.title[1] = Label(self.title[0], text="Klingon Hol Teacher's Aid")
         self.title[1].grid(sticky="")
         self.title[1].config(font=(APP_TITLE_FONT, APP_TITLE_SIZE, "bold"))
@@ -69,7 +70,7 @@ class App():
 
         #Consider sub frames around the entire tables and flash cards columns to be pretty
         self.tables[0] = SubFrame(self.frm_master, 1, 0, APP_MINSIZE_ROW, APP_MINSIZE_COL)
-        self.tables[0]["bg"] = "yellow"
+        #self.tables[0]["bg"] = "yellow"
         self.tables[1] = Label(self.tables[0], text="Tables")
         self.tables[1].grid(sticky="")
         self.tables[1].config(font=(APP_HEADER_FONT, APP_HEADER_SIZE, "bold"))
@@ -79,7 +80,7 @@ class App():
         SubFrame(self.frm_master, 1, 1, APP_MINSIZE_ROW, APP_MINSIZE_COL)
         
         self.flash_cards[0] = SubFrame(self.frm_master, 1, 2, APP_MINSIZE_ROW, APP_MINSIZE_COL)
-        self.flash_cards[0]["bg"] = "yellow"
+        #self.flash_cards[0]["bg"] = "yellow"
         self.flash_cards[1] = Label(self.flash_cards[0], text="Flash Cards")
         self.flash_cards[1].grid(sticky="")
         self.flash_cards[1].config(font=(APP_HEADER_FONT, APP_HEADER_SIZE, "bold"))
@@ -89,77 +90,85 @@ class App():
         #SubFrame(self.frm_master, 2, 0, APP_MINSIZE_ROW, APP_MINSIZE_COL*2, columnspan=2)
 
         self.rdo = SubFrame(self.frm_master, 2, 2, APP_MINSIZE_ROW, APP_MINSIZE_COL)
-        self.rdo["bg"] = "green"
-        self.rdo_english = SubFrame(self.rdo, 0, 0, APP_MINSIZE_ROW, APP_MINSIZE_COL/2)
-        self.rdo_english["bg"] = "purple"
-        self.rdo_klingon = SubFrame(self.rdo, 0, 1, APP_MINSIZE_ROW, APP_MINSIZE_COL/2)
-        self.rdo_klingon["bg"] = "blue"
+        #self.rdo["bg"] = "green"
+        self.rdo_english[0] = SubFrame(self.rdo, 0, 0, APP_MINSIZE_ROW, APP_MINSIZE_COL/2)
+        #self.rdo_english[0]["bg"] = "purple"
+        self.rdo_english[1] = Radiobutton(self.rdo_english[0], text="English", variable=self.fc_prime_lang, value=ENGLISH)
+        self.rdo_english[1].grid(sticky="")
+        self.rdo_klingon[0] = SubFrame(self.rdo, 0, 1, APP_MINSIZE_ROW, APP_MINSIZE_COL/2)
+        #self.rdo_klingon[0]["bg"] = "blue"
+        self.rdo_klingon[1] = Radiobutton(self.rdo_klingon[0], text="Klingon", variable=self.fc_prime_lang, value=KLINGON)
+        self.rdo_klingon[1].grid(sticky="")
 
         self.t_verb_prefix[0] = SubFrame(self.frm_master, 3, 0, APP_MINSIZE_ROW, APP_MINSIZE_COL)
-        self.t_verb_prefix[0]["bg"] = "green"
+        #self.t_verb_prefix[0]["bg"] = "green"
+        self.t_verb_prefix[1] = Button(self.t_verb_prefix[0], text="Verb Prefix", command=self.show_verb_prefix_table)
+        self.t_verb_prefix[1].grid(sticky="")
 
         self.fc_verb_prefix[0] = SubFrame(self.frm_master, 3, 2, APP_MINSIZE_ROW, APP_MINSIZE_COL)
-        self.fc_verb_prefix[0]["bg"] = "green"
+        #self.fc_verb_prefix[0]["bg"] = "green"
+        self.fc_verb_prefix[1] = Button(self.fc_verb_prefix[0], text="Verb Prefix", command=self.show_verb_prefix_cards)
+        self.fc_verb_prefix[1].grid(sticky="")
 
         self.t_body[0] = SubFrame(self.frm_master, 4, 0, APP_MINSIZE_ROW, APP_MINSIZE_COL)
-        self.t_body[0]["bg"] = "orange"
+        #self.t_body[0]["bg"] = "orange"
+        self.t_body[1] = Button(self.t_body[0], text="Body Parts", command=self.show_body_table)
+        self.t_body[1].grid(sticky="")
 
         self.fc_body[0] = SubFrame(self.frm_master, 4, 2, APP_MINSIZE_ROW, APP_MINSIZE_COL)
-        self.fc_body[0]["bg"] = "orange"
+        #self.fc_body[0]["bg"] = "orange"
+        self.fc_body[1] = Button(self.fc_body[0], text="Body Parts", command=self.show_body_cards)
+        self.fc_body[1].grid(sticky="")
 
         self.t_rlocation[0] = SubFrame(self.frm_master, 5, 0, APP_MINSIZE_ROW, APP_MINSIZE_COL)
-        self.t_rlocation[0]["bg"] = "purple"
+        #self.t_rlocation[0]["bg"] = "purple"
+        self.t_rlocation[1] = Button(self.t_rlocation[0], text="Relative Locations", command=self.show_rlocation_table)
+        self.t_rlocation[1].grid(sticky="")
 
         self.fc_rlocation[0] = SubFrame(self.frm_master, 5, 2, APP_MINSIZE_ROW, APP_MINSIZE_COL)
-        self.fc_rlocation[0]["bg"] = "purple"
+        #self.fc_rlocation[0]["bg"] = "purple"
+        self.fc_rlocation[1] = Button(self.fc_rlocation[0], text="Relative Locations", command=self.show_rlocation_cards)
+        self.fc_rlocation[1].grid(sticky="")
 
         self.disclaimer[0] = SubFrame(self.frm_master, 6, 0, APP_MINSIZE_ROW*5, APP_MINSIZE_COL*3, columnspan=3)
-        self.disclaimer[0]["bg"] = "green"
+        #self.disclaimer[0]["bg"] = "green"
         self.disclaimer[1] = Label(self.disclaimer[0], text="""The Klingon language reference used is 'The Klingon Dictionary' by Marc Okrand.\nThis app provides various practice drills to help memorize things like verb prefixes and locations.\nThis app does NOT provide information on pronounciation or grammar.\nAlso this app does not include new additions to the language outside of 'The Klingon Dictionary'.\nTo learn more about this beautiful langauge, see 'The Klingon Dictionary' and other books by Marc Okrand.""")
         self.disclaimer[1].grid(sticky="")
         self.disclaimer[1].config(font=(APP_DISCLAIMER_FONT, APP_DISCLAIMER_SIZE))
         self.disclaimer[1]["fg"] = APP_FG
-
-        '''
-        self.lbl_tables = Label(self.app, text="Tables")
-        self.lbl_tables.grid(row=1, column=0)
-        self.lbl_flash_cards = Label(self.app, text="Flash Cards")
-        self.lbl_flash_cards.grid(row=1, column=1)
-
-        self.btn_verb_previx_flash_cards = Button(self.app, text="Verb Prefix Table", command=self.show_verb_prefix_table)
-        self.btn_verb_previx_flash_cards.grid(row=2, column=0)
-        self.btn_verb_previx_flash_cards = Button(self.app, text="Verb Prefix Flash Cards", command=self.show_verb_prefix_cards)
-        self.btn_verb_previx_flash_cards.grid(row=2, column=1)
-        
-        self.lbl_disclaimer = Label(self.app, text="""Klingon language is taken from 'The Klingon Dictionary' by Marc Okrand.\n
-                      This app provides various practice drills to help memorize things like verb prefixes and locations.\n
-                      This app does NOT provide information on pronounciation or grammar.\n
-                      Also this app does not include new additions to the language out side of 'The Klingon Dictionary'.\n
-                      To learn more about this beautiful langauge, please see 'The Klingon Dictionary' and other books by Marc Okrand.""")
-        self.lbl_disclaimer.grid(row=3, column=0, columnspan=2)
-        '''
         
     def show_verb_prefix_table(self):
         VerbPrefixTable(self.app)
-        
-    def show_verb_prefix_cards(self):
-        FlashCards(self.app, "Verb Pronoun Prefixes", VERB_PREFIXES)
-        
-    #Development Windows
-    def show_dev_window(self):
-        DevWin(self.app)
+    
+    def show_body_table(self):
+        print("Show Body Table")
+        #BodyTable(self.app)
 
-    def show_layout_window(self):
-        LayoutWin(self.app)
+    def show_rlocation_table(self):
+        print("Show Relative Location Table")
+        #RLocationTable(self.app)
+
+    def show_verb_prefix_cards(self):
+        print(f"Prime Language Sent: {self.fc_prime_lang}")
+        FlashCards(self.app, "Verb Pronoun Prefixes", VERB_PREFIXES, self.fc_prime_lang.get())
+        
+    def show_body_cards(self):
+        print(f"Show Body Cards, Primary: {self.fc_prime_lang}")
+        #FlashCards(self.app, "Body Parts", BODY_PARTS)
+
+    def show_rlocation_cards(self):
+        print(f"Show Relative Location Cards, Primary: {self.fc_prime_lang}")
+        #FlashCards(self.app, "Relative Locations", REL_LOCATIONS)
     pass
 
 #--------- FLASH CARD CLASS -----------
 class FlashCards():
-    def __init__(self, master, subtitle, fc_type):
+    def __init__(self, master, subtitle, fc_type, fc_prime_lang):
         #Setup of Window
         self.root = Toplevel(master)
         self.my_subtitle = subtitle
         self.my_type = fc_type
+        self.my_prime_lang = fc_prime_lang
         self.height = 240
         self.width = 510
         self.root.title("Flash Cards!")
@@ -198,6 +207,9 @@ class FlashCards():
         # Weight is added to the sub-grid to enable sticky for postioning.
 
         self.subtitle[0] = SubFrame(self.frm_master, 0, 0, FC_MINSIZE_ROW, FC_MINSIZE_COL*4, columnspan=4)
+        print(f"Pre-Check: {self.my_subtitle}")
+        self.my_subtitle = (self.my_subtitle + ": Klingon to English") if self.my_prime_lang == KLINGON else (self.my_subtitle + ": English to Klingon")
+        print(f"Post-Check: {self.my_subtitle}")   
         self.subtitle[1] = Label(self.subtitle[0], text=self.my_subtitle)
         self.subtitle[1].grid(sticky="w")
         self.subtitle[1].config(font =(FC_TITLE_FONT, FC_TITLE_SIZE))

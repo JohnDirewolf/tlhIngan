@@ -36,6 +36,9 @@ VP_FONT = "Courier"
 VP_FONT_SIZE = 12
 
 #Flash Card Constants.
+#Primary language
+ENGLISH = "English"
+KLINGON = "Klingon"
 #Set the Grid to be of consistent height and width.
 FC_MINSIZE_COL = 120
 FC_MINSIZE_ROW = 30
