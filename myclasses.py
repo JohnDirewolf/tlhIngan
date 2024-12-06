@@ -326,6 +326,8 @@ class VerbPrefixTable():
         self.btn_show_key = [None, None]
         self.btn_clear = [None, None]
         self.btn_score_test = [None, None]
+        #dict, 0 Col Headers, 1 Row Headers, 2 Answer Key
+        self.dict = database.get_t_verb_prefixes()
         self.setup_ui()  # Set up the specific UI elements
         self.set_answer_key()
         self.set_null() #I-me, you-you, I-us etc are NOT VALID for a prefix ("---"), this is NOT the same as 0 for the combination does not have a prefix.
@@ -339,14 +341,7 @@ class VerbPrefixTable():
         #self.frm_master["bg"] = "yellow"
     
         # Column Names
-        self.col_labels[0][0] = "OBJECT"
-        self.col_labels[0][1] = "none"
-        self.col_labels[0][2] = "me"
-        self.col_labels[0][3] = "you"
-        self.col_labels[0][4] = "him/\nher/\nit"
-        self.col_labels[0][5] = "us"
-        self.col_labels[0][6] = "you\nplural"
-        self.col_labels[0][7] = "them"
+        self.col_labels[0] = self.dict[0] 
         #Set sub frames, colors and other attributes
         for i in range(self.frm_cols):
             if i == 0:
@@ -361,13 +356,7 @@ class VerbPrefixTable():
             self.col_labels[2][i]["bg"] = VP_COL_HDR_BG
 
         # Rows Names
-        self.row_labels[0][0] = "SUBJECT"
-        self.row_labels[0][1] = "I"
-        self.row_labels[0][2] = "you"
-        self.row_labels[0][3] = "he/she/it"
-        self.row_labels[0][4] = "we"
-        self.row_labels[0][5] = "you(plural)"
-        self.row_labels[0][6] = "they"
+        self.row_labels[0] = self.dict[1] 
         for j in range(self.frm_rows):
             self.row_labels[1][j] = SubFrame(self.frm_master, j+1, 0, VP_MINSIZE_ROW, VP_MINSIZE_COL_0)
             self.row_labels[1][j]["bg"] = VP_COL_HDR_BG
@@ -399,7 +388,7 @@ class VerbPrefixTable():
         self.btn_score_test[1].grid(sticky="")
 
     def set_answer_key(self):
-        self.answer_key = database.get_t_verb_prefixes() 
+        self.answer_key = self.dict[2] 
         
     def set_null(self):    
         for i in range(0, self.entry_rows):

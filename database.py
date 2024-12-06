@@ -30,10 +30,14 @@ def get_dict_type(dict_type):
 
 def get_t_verb_prefixes():
     return [
+        ["OBJECT", "none", "me", "you", "him/\nher/\nit", "us", "you\nplural", "them"],
+        ["SUBJECT", "I", "you", "he/she/it", "we", "you(plural)", "they"],
+        [
         ["jI-", "---", "qa-", "vI-", "---", "Sa-", "vI-"],
         ["bI-", "cho-", "---", "Da-", "ju-", "---", "Da-"],
         ["0", "mu-", "Du-", "0", "nu-", "lI-", "0"],        
         ["ma-", "---", "pI-", "wI-", "---", "re-", "DI-"],        
         ["Su-", "tu-", "---", "bo-", "che-", "---", "bo-"],        
         ["0", "mu-", "nI-", "lu-", "nu-", "lI-", "0"]
+        ]
     ]
