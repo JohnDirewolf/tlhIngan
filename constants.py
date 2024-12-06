@@ -17,8 +17,8 @@ VP_ENTRY_WIDTH=4 #This sets the width of all all the entry windows.
 #Set the Grid to be of consistent height and width.
 VP_MINSIZE_COL_0 = 120
 VP_MINSIZE_COL = 60
-VP_MINSIZE_ROW_0 = 62
-VP_MINSIZE_ROW = 40
+VP_MINSIZE_ROW_0 = 30
+VP_MINSIZE_ROW = 30
 #Verb Prefix Table Colors
 VP_COL_HDR_FG="red"
 VP_COL_HDR_BG="grey"
