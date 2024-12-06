@@ -399,15 +399,8 @@ class VerbPrefixTable():
         self.btn_score_test[1].grid(sticky="")
 
     def set_answer_key(self):
-        self.answer_key = [
-            ["jI-", "---", "qa-", "vI-", "---", "Sa-", "vI-"],
-            ["bI-", "cho-", "---", "Da-", "ju-", "---", "Da-"],
-            ["0", "mu-", "Du-", "0", "nu-", "lI-", "0"],        
-            ["ma-", "---", "pI-", "wI-", "---", "re-", "DI-"],        
-            ["Su-", "tu-", "---", "bo-", "che-", "---", "bo-"],        
-            ["0", "mu-", "nI-", "lu-", "nu-", "lI-", "0"]
-        ]
-
+        self.answer_key = database.get_t_verb_prefixes() 
+        
     def set_null(self):    
         for i in range(0, self.entry_rows):
             for j in range (0, self.entry_cols):

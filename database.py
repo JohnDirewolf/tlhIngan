@@ -27,3 +27,13 @@ def get_dict():
 
 def get_dict_type(dict_type):
     return _klingon_dict[dict_type].copy()
+
+def get_t_verb_prefixes():
+    return [
+        ["jI-", "---", "qa-", "vI-", "---", "Sa-", "vI-"],
+        ["bI-", "cho-", "---", "Da-", "ju-", "---", "Da-"],
+        ["0", "mu-", "Du-", "0", "nu-", "lI-", "0"],        
+        ["ma-", "---", "pI-", "wI-", "---", "re-", "DI-"],        
+        ["Su-", "tu-", "---", "bo-", "che-", "---", "bo-"],        
+        ["0", "mu-", "nI-", "lu-", "nu-", "lI-", "0"]
+    ]
