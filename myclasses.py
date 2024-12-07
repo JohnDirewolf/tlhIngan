@@ -310,8 +310,8 @@ class FlashCards():
 class VerbPrefixTable():
     def __init__(self, master):
         self.root = Toplevel(master)
-        self.height = 330
-        self.width = 570
+        self.height = (VP_MINSIZE_ROW_0 + (VP_MINSIZE_ROW*9) + 30)
+        self.width = (VP_MINSIZE_COL_0 + (VP_MINSIZE_COL*7) + 30)
         self.root.title("Verb Prefix Table!")
         self.root.geometry(f"{self.width}x{self.height}")
         self.frm_rows, self.frm_cols = (7, 8)
@@ -347,7 +347,7 @@ class VerbPrefixTable():
             if i == 0:
                 self.col_labels[1][0] = SubFrame(self.frm_master, 0, 0, VP_MINSIZE_ROW_0, VP_MINSIZE_COL_0)
             else:
-                self.col_labels[1][i] = SubFrame(self.frm_master, 0, i, VP_MINSIZE_ROW, VP_MINSIZE_COL)
+                self.col_labels[1][i] = SubFrame(self.frm_master, 0, i, VP_MINSIZE_ROW_0, VP_MINSIZE_COL)
             self.col_labels[1][i]["bg"] = VP_COL_HDR_BG
             self.col_labels[2][i] = Label(self.col_labels[1][i], text=self.col_labels[0][i])
             self.col_labels[2][i].grid(row=0, column=0)
@@ -375,15 +375,15 @@ class VerbPrefixTable():
                 self.entry_box[1][i][j].config(font =(VP_FONT, VP_FONT_SIZE))
 
         #Add Buttons to show answers for study and referenece, a clear button, and a submit test button.
-        self.btn_show_key[0] = SubFrame(self.frm_master, 8, 1, VP_MINSIZE_ROW, VP_MINSIZE_COL*3, columnspan=3)
+        self.btn_show_key[0] = SubFrame(self.frm_master, 8, 0, VP_MINSIZE_ROW, (VP_MINSIZE_COL_0 + (VP_MINSIZE_COL*2)), columnspan=3)
         self.btn_show_key[1] = Button(self.btn_show_key[0], text="moHaq yIcha': Show prefixes!", command=self.show_key)
         self.btn_show_key[1].grid(sticky="")
         
-        self.btn_clear[0] = SubFrame(self.frm_master, 8, 5, VP_MINSIZE_ROW, VP_MINSIZE_COL*3, columnspan=3)
+        self.btn_clear[0] = SubFrame(self.frm_master, 8, 4, VP_MINSIZE_ROW, VP_MINSIZE_COL*4, columnspan=4)
         self.btn_clear[1] = Button(self.btn_clear[0], text="wa'chaw yIteq: Clear table!", command=self.clear)
         self.btn_clear[1].grid(sticky="")
         
-        self.btn_score_test[0] = SubFrame(self.frm_master, 9, 1, VP_MINSIZE_ROW, VP_MINSIZE_COL, columnspan=7)
+        self.btn_score_test[0] = SubFrame(self.frm_master, 9, 2, VP_MINSIZE_ROW, VP_MINSIZE_COL*3, columnspan=3)
         self.btn_score_test[1] = Button(self.btn_score_test[0], text="'el: Submit!", command=self.score_test)
         self.btn_score_test[1].grid(sticky="")
 
@@ -411,9 +411,26 @@ class VerbPrefixTable():
                     self.entry_box[1][i][j]["bg"] = VP_BG_WRONG
                     qapla = False
         if qapla:
-            print("Qapla'!")
+            self.result_popup("Success", "Qapla'!")
         else:
-            print("ghobe'")
+            self.result_popup("Failure", "ghobe'!")
+
+    def result_popup(self, title, text):
+        self.root.protocol("WM_DELETE_WINDOW", lambda: None)
+        popup = Toplevel(self.root)
+        popup.title(title)
+        popup.transient(self.root)
+        frm_popup = Frame(popup, relief=GROOVE, height=180, width=180, borderwidth=5)
+        frm_popup.grid(row=0, column=0, padx=10, pady=10)
+        lbl_result = Label(frm_popup, text=text, font=("Courier", 24), padx=5, pady=5)
+        lbl_result.grid(row=0, column=0, padx=10, pady=(10,5))
+        btn_close = Button(frm_popup, text="Close", font=("Courier", 24), padx=5, pady=5, command=popup.destroy, borderwidth=5)
+        btn_close.grid(row=1, column=0, padx=10, pady=(5, 10))
+        popup.update()
+        popup.grab_set_global()
+        popup.focus_force()
+        self.root.wait_window(popup)
+        self.root.protocol("WM_DELETE_WINDOW", self.root.destroy)
 
     def show_key(self):
         self.clear() #Clear existing information if any.

@@ -17,17 +17,17 @@ VP_ENTRY_WIDTH=4 #This sets the width of all all the entry windows.
 #Set the Grid to be of consistent height and width.
 VP_MINSIZE_COL_0 = 120
 VP_MINSIZE_COL = 60
-VP_MINSIZE_ROW_0 = 30
+VP_MINSIZE_ROW_0 = 60
 VP_MINSIZE_ROW = 30
 #Verb Prefix Table Colors
-VP_COL_HDR_FG="red"
+VP_COL_HDR_FG="purple"
 VP_COL_HDR_BG="grey"
 VP_ROW_HDR_FG="blue"
 VP_ROW_HDR_BG="grey"
 VP_FG="black"
 VP_BG_REF="lightgrey"
 VP_BG_ENTRY="white"
-VP_BG_CORRECT = "green"
+VP_BG_CORRECT = "lightgreen"
 VP_BG_WRONG = "pink"
 #Verb Previx Table Fonts
 VP_ALL_HDR_FONT = "Courier"
