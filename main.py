@@ -7,6 +7,7 @@ import database
 #from tkinter import ttk
 
 def main():
+    database.save_dict()
     #Load the database
     database.load_dict()
     #Create our main app window

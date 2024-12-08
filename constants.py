@@ -1,4 +1,18 @@
 DEV = True
+SAVE = False
+
+#Language
+ENGLISH = "English"
+KLINGON = "Klingon"
+TYPE = "Type"
+#Word Types
+PRONOUNS = "pronouns"
+VERB_BASIC_PREFIXES = "verb_basic_prefixes"
+VERB_IMPERATIVES_PREFIXES = "verb_imperatives_prefixes"
+NUMBERS = "numbers"
+BODY_PARTS = "body_parts"
+REL_LOCATIONS = "relative_locations"
+
 #App Constants
 APP_MINSIZE_ROW = 30
 APP_MINSIZE_COL = 300
@@ -36,15 +50,12 @@ VP_FONT = "Courier"
 VP_FONT_SIZE = 12
 
 #Flash Card Constants.
-#Primary language
-ENGLISH = "English"
-KLINGON = "Klingon"
 #Set the Grid to be of consistent height and width.
 FC_MINSIZE_COL = 120
 FC_MINSIZE_ROW = 30
 #Flash Card Colors
 FC_FG = "black"
-FC_BG = "white"
+FC_BG = "grey"
 #Flash Card Font
 FC_WORD_FONT = "Arial"
 FC_WORD_SIZE = 28
@@ -54,8 +65,3 @@ FC_ENTRY_FONT = "Courier"
 FC_ENTRY_SIZE = 10
 FC_BTN_FONT = "Courier"
 FC_BTN_SIZE = 10
-
-#Word Types
-VERB_PREFIXES = "verb_prefixes"
-BODY_PARTS = "body_parts"
-REL_LOCATIONS = "relative_locations"

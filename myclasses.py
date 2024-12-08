@@ -14,7 +14,7 @@ def SubFrame(parent, row, column, height, width, columnspan=1):
     frm.grid_propagate(False)
     return frm
 
-#----------- APP CLASS - INHERITS WINDOW CLASS AND ADDS THE LEARNING OPTIONS -----------
+#----------- APP CLASS -----------
 class App():
     def __init__(self):
         self.app = Tk()
@@ -149,8 +149,8 @@ class App():
         #RLocationTable(self.app)
 
     def show_verb_prefix_cards(self):
-        print(f"Prime Language Sent: {self.fc_prime_lang}")
-        FlashCards(self.app, "Verb Pronoun Prefixes", VERB_PREFIXES, self.fc_prime_lang.get())
+        #print(f"Prime Language Sent: {self.fc_prime_lang.get()}")
+        FlashCards(self.app, "Verb Pronoun Prefixes", VERB_BASIC_PREFIXES, self.fc_prime_lang.get())
         
     def show_body_cards(self):
         print(f"Show Body Cards, Primary: {self.fc_prime_lang}")
@@ -166,9 +166,10 @@ class FlashCards():
     def __init__(self, master, subtitle, fc_type, fc_prime_lang):
         #Setup of Window
         self.root = Toplevel(master)
-        self.my_subtitle = subtitle
         self.my_type = fc_type
         self.my_prime_lang = fc_prime_lang
+        self.my_to_lang = KLINGON if self.my_prime_lang == ENGLISH else ENGLISH
+        self.my_subtitle = subtitle + ": " + self.my_prime_lang + " to " + self.my_to_lang
         self.height = 240
         self.width = 510
         self.root.title("Flash Cards!")
@@ -179,26 +180,32 @@ class FlashCards():
         #Objects are a array of two variables, 0 is the frame, 1 is the widget.
         self.subtitle = [None, None]
         self.word = [None, None]
+        self.word_text = StringVar(value="")
         self.lbl_answer = [None, None]
-        self.entry_answer = [None, None]
+        self.answer = [None, None]
+        self.answer_text = StringVar(value="")
         self.lbl_type = [None, None]
-        self.entry_type = [None, None]
+        self.type = [None, None]
+        self.type_text = StringVar(value="")
+        self.type_needed = False
         self.submit = [None, None]
         self.show = [None, None]
         self.next = [None, None]
         self.prev = [None, None]
         self.close = [None, None]
 
-        self.klingon = self.fc_load_dict()
-        #for word in self.klingon:
-        #    print(f"item: {word}")
+        self.klingon = ""
+        self.cur_word = 0
         self.setup_ui()  # Set up the specific UI elements at start
 
     def setup_ui(self):
+        self.klingon = database.get_dict_type(self.my_type)
+        random.shuffle(self.klingon)
+
         self.root.resizable(width=False, height=False)
         
         #Master Frame - gives a nice outer raised boarder.
-        self.frm_master = Frame(self.root, relief=RAISED, height=500, width=500, borderwidth=5)
+        self.frm_master = Frame(self.root, relief=GROOVE, height=500, width=500, borderwidth=5)
         self.frm_master.grid(row=0, column=0, padx=10, pady=10)
 
         # Labels and other text widgets will automatically resize for the text within. So we don't fight this, we just let them clamp perfectly on their text.
@@ -206,102 +213,109 @@ class FlashCards():
         # Weight is added to the sub-grid to enable sticky for postioning.
 
         self.subtitle[0] = SubFrame(self.frm_master, 0, 0, FC_MINSIZE_ROW, FC_MINSIZE_COL*4, columnspan=4)
-        self.my_subtitle = (self.my_subtitle + ": Klingon to English") if self.my_prime_lang == KLINGON else (self.my_subtitle + ": English to Klingon")
         self.subtitle[1] = Label(self.subtitle[0], text=self.my_subtitle)
         self.subtitle[1].grid(sticky="w")
         self.subtitle[1].config(font =(FC_TITLE_FONT, FC_TITLE_SIZE))
         self.subtitle[1]["fg"] = FC_FG
-        #self.subtitle[1]["bg"] = FC_BG
 
         self.word[0] = SubFrame(self.frm_master, 1, 0, FC_MINSIZE_ROW*2, FC_MINSIZE_COL*4, columnspan=4)
-        self.word[1] = Label(self.word[0], text="Qapla'!")
+        self.word[1] = Label(self.word[0], textvariable=self.word_text)
         self.word[1].grid(sticky="")
         self.word[1].config(font =(FC_WORD_FONT, FC_WORD_SIZE))
         self.word[1]["fg"] = FC_FG
-        #self.word[1]["bg"] = FC_BG
-
+        self.load_word()
+        
         self.lbl_answer[0] = SubFrame(self.frm_master, 2, 0, FC_MINSIZE_ROW, FC_MINSIZE_COL)
-        #This will need to know if we are translating English to Klingon or DIvI' mugh tlhIngan
-        self.lbl_answer[1] = Label(self.lbl_answer[0], text="English:")
+        self.lbl_answer[1] = Label(self.lbl_answer[0], text=(self.my_to_lang + ":"))
         self.lbl_answer[1].grid(sticky="")
         self.lbl_answer[1].config(font =(FC_ENTRY_FONT, FC_ENTRY_SIZE))
         self.lbl_answer[1]["fg"] = FC_FG
-        #self.lbl_answer[1]["bg"] = FC_BG
-
-        self.entry_answer[0] = SubFrame(self.frm_master, 2, 1, FC_MINSIZE_ROW, FC_MINSIZE_COL*3, columnspan=3)
-        self.entry_answer[1] = Entry(self.entry_answer[0], relief=SUNKEN, borderwidth=3)
-        self.entry_answer[1].grid(sticky="NSEW")
-        self.entry_answer[1].config(font =(FC_ENTRY_FONT, FC_ENTRY_SIZE))
-        self.entry_answer[1]["fg"] = FC_FG
-        self.entry_answer[1]["bg"] = FC_BG
+  
+        self.answer[0] = SubFrame(self.frm_master, 2, 1, FC_MINSIZE_ROW, FC_MINSIZE_COL*3, columnspan=3)
+        self.answer[1] = Label(self.answer[0], textvariable=self.answer_text, relief=SUNKEN, borderwidth=3)
+        self.answer[1].grid(sticky="NSEW")
+        self.answer[1].config(font =(FC_ENTRY_FONT, FC_ENTRY_SIZE))
+        self.answer[1]["fg"] = FC_FG
 
         self.lbl_type[0] = SubFrame(self.frm_master, 3, 0, FC_MINSIZE_ROW, FC_MINSIZE_COL)
-        #This may or may not be shown if Type is important or not.
         self.lbl_type[1] = Label(self.lbl_type[0], text="Type:")
-        self.lbl_type[1].grid(sticky="")
+        #Type is invisible if not needed.
+        if self.type_needed:
+            self.lbl_type[1].grid(sticky="")
+        else:
+            self.lbl_type[1].grid_forget()
         self.lbl_type[1].config(font =(FC_ENTRY_FONT, FC_ENTRY_SIZE))
         self.lbl_type[1]["fg"] = FC_FG
-        #self.lbl_type[1]["bg"] = FC_BG
-        
-        self.entry_type[0] = SubFrame(self.frm_master, 3, 1, FC_MINSIZE_ROW, FC_MINSIZE_COL*3, columnspan=3)
-        self.entry_type[1] = Entry(self.entry_type[0], relief=SUNKEN, borderwidth=3)
-        self.entry_type[1].grid(sticky="NSEW")
-        self.entry_type[1].config(font =(FC_ENTRY_FONT, FC_ENTRY_SIZE))
-        self.entry_type[1]["fg"] = FC_FG
-        #self.entry_type[1]["bg"] = FC_BG
+        self.lbl_type[1]["bg"] = FC_BG
+
+        self.type[0] = SubFrame(self.frm_master, 3, 1, FC_MINSIZE_ROW, FC_MINSIZE_COL*3, columnspan=3)
+        self.type[1] = Label(self.type[0], textvariable=self.type_text, relief=SUNKEN, borderwidth=3)
+        #Type is invisible if not needed
+        if self.type_needed:
+            self.type[1].grid(sticky="NSEW")
+        else:
+            self.type[1].grid_forget()
+        self.type[1].config(font =(FC_ENTRY_FONT, FC_ENTRY_SIZE))
+        self.type[1]["fg"] = FC_FG
+        self.type[1]["bg"] = FC_BG
+        self.clear_type()
 
         self.prev[0] = SubFrame(self.frm_master, 4, 0, FC_MINSIZE_ROW, FC_MINSIZE_COL)
         self.prev[1] = Button(self.prev[0], text="< Prev", command=self.cmd_prev, width=FC_MINSIZE_COL-20, height=FC_MINSIZE_ROW-10)
         self.prev[1].grid(sticky="")
         self.prev[1].config(font =(FC_BTN_FONT, FC_BTN_SIZE))
         self.prev[1]["fg"] = FC_FG
-        self.prev[1]["bg"] = FC_BG
-
-        self.submit[0] = SubFrame(self.frm_master, 4, 1, FC_MINSIZE_ROW, FC_MINSIZE_COL)
-        self.submit[1] = Button(self.submit[0], text="Submit", command=self.cmd_submit, width=FC_MINSIZE_COL-20, height=FC_MINSIZE_ROW-10)
-        self.submit[1].grid(sticky="")
-        self.submit[1].config(font =(FC_BTN_FONT, FC_BTN_SIZE))
-        self.submit[1]["fg"] = FC_FG
-        self.submit[1]["bg"] = FC_BG
-
-        self.show[0] = SubFrame(self.frm_master, 4, 2, FC_MINSIZE_ROW, FC_MINSIZE_COL)
-        self.show[1] = Button(self.show[0], text="Show", command=self.cmd_show, width=FC_MINSIZE_COL-20, height=FC_MINSIZE_ROW-10)
+        
+        self.show[0] = SubFrame(self.frm_master, 4, 1, FC_MINSIZE_ROW, FC_MINSIZE_COL*2, columnspan=2)
+        self.show[1] = Button(self.show[0], text="Show", command=self.cmd_show, width=((FC_MINSIZE_COL*2)-20), height=FC_MINSIZE_ROW-10)
         self.show[1].grid(sticky="")
         self.show[1].config(font =(FC_BTN_FONT, FC_BTN_SIZE))
         self.show[1]["fg"] = FC_FG
-        self.show[1]["bg"] = FC_BG
-
+        
         self.next[0] = SubFrame(self.frm_master, 4, 3, FC_MINSIZE_ROW, FC_MINSIZE_COL)
         self.next[1] = Button(self.next[0], text="Next >", command=self.cmd_next, width=FC_MINSIZE_COL-20, height=FC_MINSIZE_ROW-10)
         self.next[1].grid(sticky="")
         self.next[1].config(font =(FC_BTN_FONT, FC_BTN_SIZE))
         self.next[1]["fg"] = FC_FG
-        self.next[1]["bg"] = FC_BG
-
+        
         self.close[0] = SubFrame(self.frm_master, 5, 1, FC_MINSIZE_ROW, FC_MINSIZE_COL*2, columnspan=2)
         self.close[1] = Button(self.close[0], text="Close", command=self.cmd_close, width=FC_MINSIZE_COL-20, height=FC_MINSIZE_ROW-10)
         self.close[1].grid(sticky="")
         self.close[1].config(font =(FC_BTN_FONT, FC_BTN_SIZE))
         self.close[1]["fg"] = FC_FG
-        self.close[1]["bg"] = FC_BG
+        
+    def clear_answer(self):
+        self.answer_text.set("")
 
-    def fc_load_dict(self):
-        print("Get Type from Dictionary")
-        type_dict = database.get_dict_type(self.my_type)
-        random.shuffle(type_dict) 
-        return type_dict
+    def clear_type(self):
+        self.type_text.set("")
 
-    def cmd_submit(self):
-        print(f"Submit. Answer: {self.entry_answer[1].get()}, Type: {self.entry_type[1].get()}")
+    def load_word(self):
+        self.clear_answer()
+        self.clear_type()
+        self.word_text.set(self.klingon[self.cur_word][self.my_prime_lang])
+    
+    def load_answer(self):
+        self.answer_text.set(self.klingon[self.cur_word][self.my_to_lang])
 
     def cmd_show(self):
-        print("Show")
+        self.answer_text.set(self.klingon[self.cur_word][self.my_to_lang])
+        if self.type_needed:
+            self.type_text.set(self.klingon[self.cur_word][TYPE])
     
     def cmd_next(self):
-        print("Next")
+        if self.cur_word == len(self.klingon) - 1:
+            self.cur_word = 0
+        else:
+            self.cur_word += 1
+        self.load_word()
 
     def cmd_prev(self):
-        print("Prev")
+        if self.cur_word == 0:
+            self.cur_word = len(self.klingon) - 1
+        else:
+            self.cur_word -= 1
+        self.load_word()
 
     def cmd_close(self):
         self.root.destroy()
