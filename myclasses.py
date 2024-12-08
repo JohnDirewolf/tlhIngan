@@ -36,6 +36,7 @@ class App():
         self.t_body = [None, None]
         self.t_rlocation = [None, None]
         self.fc_verb_prefix = [None, None]
+        self.fc_pronoun = [None, None]
         self.fc_body = [None, None]
         self.fc_rlocation = [None, None]
         #Radio
@@ -59,79 +60,73 @@ class App():
         #Master Frame - gives a nice outer raised boarder.
         self.frm_master = Frame(self.app, relief=RIDGE, height=400, width=900, borderwidth=5)
         self.frm_master.grid(row=0, column=0, padx=10, pady=10)
-        #self.frm_master["bg"] = "red"
         
         self.title[0] = SubFrame(self.frm_master, 0, 0, APP_MINSIZE_ROW, APP_MINSIZE_COL*3, columnspan=3)
-        #self.title[0]["bg"] = "purple"
         self.title[1] = Label(self.title[0], text="Klingon Hol Teacher's Aid")
         self.title[1].grid(sticky="")
         self.title[1].config(font=(APP_TITLE_FONT, APP_TITLE_SIZE, "bold"))
         self.title[1]["fg"] = APP_FG
 
         #Consider sub frames around the entire tables and flash cards columns to be pretty
+        
+        #TABLES
         self.tables[0] = SubFrame(self.frm_master, 1, 0, APP_MINSIZE_ROW, APP_MINSIZE_COL)
-        #self.tables[0]["bg"] = "yellow"
         self.tables[1] = Label(self.tables[0], text="Tables")
         self.tables[1].grid(sticky="")
         self.tables[1].config(font=(APP_HEADER_FONT, APP_HEADER_SIZE, "bold"))
         self.tables[1]["fg"] = APP_FG
 
+        self.t_verb_prefix[0] = SubFrame(self.frm_master, 3, 0, APP_MINSIZE_ROW, APP_MINSIZE_COL)
+        self.t_verb_prefix[1] = Button(self.t_verb_prefix[0], text="Verb Prefix", command=self.show_verb_prefix_table)
+        self.t_verb_prefix[1].grid(sticky="")
+
+        self.t_body[0] = SubFrame(self.frm_master, 4, 0, APP_MINSIZE_ROW, APP_MINSIZE_COL)
+        self.t_body[1] = Button(self.t_body[0], text="Body Parts", command=self.show_body_table)
+        self.t_body[1].grid(sticky="")
+
+        self.t_rlocation[0] = SubFrame(self.frm_master, 5, 0, APP_MINSIZE_ROW, APP_MINSIZE_COL)
+        self.t_rlocation[1] = Button(self.t_rlocation[0], text="Relative Locations", command=self.show_rlocation_table)
+        self.t_rlocation[1].grid(sticky="")
+
         #Blank frame, all it does is fill the middle cell of the row, this allows this row to define the columns nicely
         SubFrame(self.frm_master, 1, 1, APP_MINSIZE_ROW, APP_MINSIZE_COL)
         
+        #FLASH CARDS
         self.flash_cards[0] = SubFrame(self.frm_master, 1, 2, APP_MINSIZE_ROW, APP_MINSIZE_COL)
-        #self.flash_cards[0]["bg"] = "yellow"
         self.flash_cards[1] = Label(self.flash_cards[0], text="Flash Cards")
         self.flash_cards[1].grid(sticky="")
         self.flash_cards[1].config(font=(APP_HEADER_FONT, APP_HEADER_SIZE, "bold"))
         self.flash_cards[1]["fg"] = APP_FG
 
-        #So the buttons line up nicely with the flash cards that have the extra option of primary language, there is a blank two column in row 2
-        #SubFrame(self.frm_master, 2, 0, APP_MINSIZE_ROW, APP_MINSIZE_COL*2, columnspan=2)
-
+        #Flash Cards need to know if they should show Klingon or English so the user can review the opposite.
         self.rdo = SubFrame(self.frm_master, 2, 2, APP_MINSIZE_ROW, APP_MINSIZE_COL)
-        #self.rdo["bg"] = "green"
         self.rdo_english[0] = SubFrame(self.rdo, 0, 0, APP_MINSIZE_ROW, APP_MINSIZE_COL/2)
-        #self.rdo_english[0]["bg"] = "purple"
         self.rdo_english[1] = Radiobutton(self.rdo_english[0], text="English", variable=self.fc_prime_lang, value=ENGLISH)
         self.rdo_english[1].grid(sticky="")
         self.rdo_klingon[0] = SubFrame(self.rdo, 0, 1, APP_MINSIZE_ROW, APP_MINSIZE_COL/2)
-        #self.rdo_klingon[0]["bg"] = "blue"
         self.rdo_klingon[1] = Radiobutton(self.rdo_klingon[0], text="Klingon", variable=self.fc_prime_lang, value=KLINGON)
         self.rdo_klingon[1].grid(sticky="")
 
-        self.t_verb_prefix[0] = SubFrame(self.frm_master, 3, 0, APP_MINSIZE_ROW, APP_MINSIZE_COL)
-        #self.t_verb_prefix[0]["bg"] = "green"
-        self.t_verb_prefix[1] = Button(self.t_verb_prefix[0], text="Verb Prefix", command=self.show_verb_prefix_table)
-        self.t_verb_prefix[1].grid(sticky="")
-
-        self.fc_verb_prefix[0] = SubFrame(self.frm_master, 3, 2, APP_MINSIZE_ROW, APP_MINSIZE_COL)
-        #self.fc_verb_prefix[0]["bg"] = "green"
+        '''
+        #This is not currently used as the nature of the Basic Pronominal Prefixes does not work well for Flash Cards and will require more unique coding.
+        self.fc_verb_prefix[0] = SubFrame(self.frm_master, X, Y, APP_MINSIZE_ROW, APP_MINSIZE_COL)
         self.fc_verb_prefix[1] = Button(self.fc_verb_prefix[0], text="Verb Prefix", command=self.show_verb_prefix_cards)
         self.fc_verb_prefix[1].grid(sticky="")
+        '''
 
-        self.t_body[0] = SubFrame(self.frm_master, 4, 0, APP_MINSIZE_ROW, APP_MINSIZE_COL)
-        #self.t_body[0]["bg"] = "orange"
-        self.t_body[1] = Button(self.t_body[0], text="Body Parts", command=self.show_body_table)
-        self.t_body[1].grid(sticky="")
+        self.fc_pronoun[0] = SubFrame(self.frm_master, 3, 2, APP_MINSIZE_ROW, APP_MINSIZE_COL)
+        self.fc_pronoun[1] = Button(self.fc_pronoun[0], text="Pronouns", command=self.show_pronoun_cards)
+        self.fc_pronoun[1].grid(sticky="")
 
         self.fc_body[0] = SubFrame(self.frm_master, 4, 2, APP_MINSIZE_ROW, APP_MINSIZE_COL)
-        #self.fc_body[0]["bg"] = "orange"
         self.fc_body[1] = Button(self.fc_body[0], text="Body Parts", command=self.show_body_cards)
         self.fc_body[1].grid(sticky="")
 
-        self.t_rlocation[0] = SubFrame(self.frm_master, 5, 0, APP_MINSIZE_ROW, APP_MINSIZE_COL)
-        #self.t_rlocation[0]["bg"] = "purple"
-        self.t_rlocation[1] = Button(self.t_rlocation[0], text="Relative Locations", command=self.show_rlocation_table)
-        self.t_rlocation[1].grid(sticky="")
-
         self.fc_rlocation[0] = SubFrame(self.frm_master, 5, 2, APP_MINSIZE_ROW, APP_MINSIZE_COL)
-        #self.fc_rlocation[0]["bg"] = "purple"
         self.fc_rlocation[1] = Button(self.fc_rlocation[0], text="Relative Locations", command=self.show_rlocation_cards)
         self.fc_rlocation[1].grid(sticky="")
 
         self.disclaimer[0] = SubFrame(self.frm_master, 6, 0, APP_MINSIZE_ROW*5, APP_MINSIZE_COL*3, columnspan=3)
-        #self.disclaimer[0]["bg"] = "green"
         self.disclaimer[1] = Label(self.disclaimer[0], text="""The Klingon language reference used is 'The Klingon Dictionary' by Marc Okrand.\nThis app provides various practice drills to help memorize things like verb prefixes and locations.\nThis app does NOT provide information on pronounciation or grammar.\nAlso this app does not include new additions to the language outside of 'The Klingon Dictionary'.\nTo learn more about this beautiful langauge, see 'The Klingon Dictionary' and other books by Marc Okrand.""")
         self.disclaimer[1].grid(sticky="")
         self.disclaimer[1].config(font=(APP_DISCLAIMER_FONT, APP_DISCLAIMER_SIZE))
@@ -149,17 +144,17 @@ class App():
         #RLocationTable(self.app)
 
     def show_verb_prefix_cards(self):
-        #print(f"Prime Language Sent: {self.fc_prime_lang.get()}")
+        #This is not currently used, see commented out calling button for more details.
         FlashCards(self.app, "Verb Pronoun Prefixes", VERB_BASIC_PREFIXES, self.fc_prime_lang.get())
+
+    def show_pronoun_cards(self):
+        FlashCards(self.app, "Pronouns", PRONOUNS, self.fc_prime_lang.get())
         
     def show_body_cards(self):
-        print(f"Show Body Cards, Primary: {self.fc_prime_lang}")
-        #FlashCards(self.app, "Body Parts", BODY_PARTS)
+        FlashCards(self.app, "Body Parts", BODY_PARTS, self.fc_prime_lang.get())
 
     def show_rlocation_cards(self):
-        print(f"Show Relative Location Cards, Primary: {self.fc_prime_lang}")
-        #FlashCards(self.app, "Relative Locations", REL_LOCATIONS)
-    pass
+        FlashCards(self.app, "Relative Locations", REL_LOCATIONS, self.fc_prime_lang.get())
 
 #--------- FLASH CARD CLASS -----------
 class FlashCards():
@@ -230,10 +225,11 @@ class FlashCards():
         self.lbl_answer[1].grid(sticky="")
         self.lbl_answer[1].config(font =(FC_ENTRY_FONT, FC_ENTRY_SIZE))
         self.lbl_answer[1]["fg"] = FC_FG
-  
+
         self.answer[0] = SubFrame(self.frm_master, 2, 1, FC_MINSIZE_ROW, FC_MINSIZE_COL*3, columnspan=3)
-        self.answer[1] = Label(self.answer[0], textvariable=self.answer_text, relief=SUNKEN, borderwidth=3)
-        self.answer[1].grid(sticky="NSEW")
+        self.answer[0].config(relief="sunken", borderwidth=3)
+        self.answer[1] = Label(self.answer[0], textvariable=self.answer_text, borderwidth=3)
+        self.answer[1].grid(sticky="W")
         self.answer[1].config(font =(FC_ENTRY_FONT, FC_ENTRY_SIZE))
         self.answer[1]["fg"] = FC_FG
 

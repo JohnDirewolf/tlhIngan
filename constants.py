@@ -57,11 +57,11 @@ FC_MINSIZE_ROW = 30
 FC_FG = "black"
 FC_BG = "grey"
 #Flash Card Font
-FC_WORD_FONT = "Arial"
+FC_WORD_FONT = "Times New Roman"
 FC_WORD_SIZE = 28
 FC_TITLE_FONT = "Courier"
 FC_TITLE_SIZE = 10
-FC_ENTRY_FONT = "Courier"
+FC_ENTRY_FONT = "Times New Roman"
 FC_ENTRY_SIZE = 10
 FC_BTN_FONT = "Courier"
 FC_BTN_SIZE = 10
