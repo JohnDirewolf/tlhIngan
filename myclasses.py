@@ -19,7 +19,7 @@ class App():
     def __init__(self):
         self.app = Tk()
         self.app.title("tlhIngan Hol ghojmoHwI' boQ")
-        self.height = 360
+        self.height = 420
         self.width = 930
         self.app.geometry(f"{self.width}x{self.height}")
         #Master Frame, is the master frame of the window, gives a nice border.
@@ -39,6 +39,8 @@ class App():
         self.fc_pronoun = [None, None]
         self.fc_body = [None, None]
         self.fc_rlocation = [None, None]
+        self.fc_verb = [None, None]
+        self.fc_adverb = [None, None]
         #Radio
         #radio_button1 = tk.Radiobutton(window, text="Option 1", variable=selected_value, value="option1")
         self.fc_prime_lang = StringVar(value=KLINGON)
@@ -126,7 +128,15 @@ class App():
         self.fc_rlocation[1] = Button(self.fc_rlocation[0], text="Relative Locations", command=self.show_rlocation_cards)
         self.fc_rlocation[1].grid(sticky="")
 
-        self.disclaimer[0] = SubFrame(self.frm_master, 6, 0, APP_MINSIZE_ROW*5, APP_MINSIZE_COL*3, columnspan=3)
+        self.fc_verb[0] = SubFrame(self.frm_master, 6, 2, APP_MINSIZE_ROW, APP_MINSIZE_COL)
+        self.fc_verb[1] = Button(self.fc_verb[0], text="Verbs", command=self.show_verb_cards)
+        self.fc_verb[1].grid(sticky="")
+
+        self.fc_adverb[0] = SubFrame(self.frm_master, 7, 2, APP_MINSIZE_ROW, APP_MINSIZE_COL)
+        self.fc_adverb[1] = Button(self.fc_adverb[0], text="Adverbs", command=self.show_adverb_cards)
+        self.fc_adverb[1].grid(sticky="")
+
+        self.disclaimer[0] = SubFrame(self.frm_master, 8, 0, APP_MINSIZE_ROW*5, APP_MINSIZE_COL*3, columnspan=3)
         self.disclaimer[1] = Label(self.disclaimer[0], text="""The Klingon language reference used is 'The Klingon Dictionary' by Marc Okrand.\nThis app provides various practice drills to help memorize things like verb prefixes and locations.\nThis app does NOT provide information on pronounciation or grammar.\nAlso this app does not include new additions to the language outside of 'The Klingon Dictionary'.\nTo learn more about this beautiful langauge, see 'The Klingon Dictionary' and other books by Marc Okrand.""")
         self.disclaimer[1].grid(sticky="")
         self.disclaimer[1].config(font=(APP_DISCLAIMER_FONT, APP_DISCLAIMER_SIZE))
@@ -155,6 +165,12 @@ class App():
 
     def show_rlocation_cards(self):
         FlashCards(self.app, "Relative Locations", REL_LOCATIONS, self.fc_prime_lang.get())
+
+    def show_verb_cards(self):
+        FlashCards(self.app, "verbs", VERBS, self.fc_prime_lang.get())
+
+    def show_adverb_cards(self):
+        FlashCards(self.app, "Adverbs", ADVERBS, self.fc_prime_lang.get())
 
 #--------- FLASH CARD CLASS -----------
 class FlashCards():

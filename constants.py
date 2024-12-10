@@ -12,6 +12,11 @@ VERB_IMPERATIVES_PREFIXES = "verb_imperatives_prefixes"
 NUMBERS = "numbers"
 BODY_PARTS = "body_parts"
 REL_LOCATIONS = "relative_locations"
+VERBS = "verbs"
+PEOPLE = "people"
+ADJECTIVES = "adjectives"
+ADVERBS = "adverbs"
+NOUNS = "nouns"
 
 #App Constants
 APP_MINSIZE_ROW = 30
