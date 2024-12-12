@@ -20,6 +20,9 @@ NOUNS = "nouns"
 #App Constants
 APP_MINSIZE_ROW = 30
 APP_MINSIZE_COL = 300
+APP_T_BTN_WIDTH = 15
+APP_FC_BTN_WIDTH = 15
+APP_RDO_SPACER = 20
 #App Colors
 APP_FG = "black"
 #App Fonts
