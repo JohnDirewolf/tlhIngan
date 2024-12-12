@@ -1,5 +1,4 @@
 DEV = True
-SAVE = False
 
 #Language
 ENGLISH = "English"

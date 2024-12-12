@@ -210,7 +210,7 @@ class FlashCards():
         self.setup_ui()  # Set up the specific UI elements at start
 
     def setup_ui(self):
-        self.klingon = database.get_dict_type(self.my_type)
+        self.klingon = database.get_klingon_type(self.my_type)
         random.shuffle(self.klingon)
 
         self.root.resizable(width=False, height=False)
@@ -353,7 +353,7 @@ class VerbPrefixTable():
         self.btn_clear = [None, None]
         self.btn_score_test = [None, None]
         #dict, 0 Col Headers, 1 Row Headers, 2 Answer Key
-        self.dict = database.get_t_verb_prefixes()
+        self.dict = database.get_tables_type(VERB_BASIC_PREFIXES)
         self.setup_ui()  # Set up the specific UI elements
         self.set_answer_key()
         self.set_null() #I-me, you-you, I-us etc are NOT VALID for a prefix ("---"), this is NOT the same as 0 for the combination does not have a prefix.
