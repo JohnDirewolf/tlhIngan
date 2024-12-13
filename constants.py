@@ -11,11 +11,14 @@ VERB_IMPERATIVES_PREFIXES = "verb_imperatives_prefixes"
 NUMBERS = "numbers"
 BODY_PARTS = "body_parts"
 REL_LOCATIONS = "relative_locations"
+PLACES = "places"
 VERBS = "verbs"
 PEOPLE = "people"
+RELATIONSHIPS = "relationships"
 ADJECTIVES = "adjectives"
 ADVERBS = "adverbs"
 NOUNS = "nouns"
+TIME = "time"
 
 #App Constants
 APP_MINSIZE_ROW = 30
@@ -55,6 +58,29 @@ VP_ALL_HDR_FONT = "Courier"
 VP_ALL_HDR_FONT_SIZE = 12
 VP_FONT = "Courier"
 VP_FONT_SIZE = 12
+
+# Imperative Prefix Table Constants
+IP_ENTRY_WIDTH=4 #This sets the width of all all the entry windows.
+#Set the Grid to be of consistent height and width.
+IP_MINSIZE_COL_0 = 120
+IP_MINSIZE_COL = 60
+IP_MINSIZE_ROW_0 = 60
+IP_MINSIZE_ROW = 30
+#Verb Prefix Table Colors
+IP_COL_HDR_FG="purple"
+IP_COL_HDR_BG="grey"
+IP_ROW_HDR_FG="blue"
+IP_ROW_HDR_BG="grey"
+IP_FG="black"
+IP_BG_REF="lightgrey"
+IP_BG_ENTRY="white"
+IP_BG_CORRECT = "lightgreen"
+IP_BG_WRONG = "pink"
+#Imperative Previx Table Fonts
+IP_ALL_HDR_FONT = "Courier"
+IP_ALL_HDR_FONT_SIZE = 12
+IP_FONT = "Courier"
+IP_FONT_SIZE = 12
 
 #Flash Card Constants.
 #Set the Grid to be of consistent height and width.

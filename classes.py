@@ -14,12 +14,29 @@ def SubFrame(parent, row, column, height, width, columnspan=1):
     frm.grid_propagate(False)
     return frm
 
+def result_popup(parent, title, text):
+        parent.protocol("WM_DELETE_WINDOW", lambda: None)
+        popup = Toplevel(parent)
+        popup.title(title)
+        popup.transient(parent)
+        frm_popup = Frame(popup, relief=GROOVE, height=180, width=180, borderwidth=5)
+        frm_popup.grid(row=0, column=0, padx=10, pady=10)
+        lbl_result = Label(frm_popup, text=text, font=("Courier", 24), padx=5, pady=5)
+        lbl_result.grid(row=0, column=0, padx=10, pady=(10,5))
+        btn_close = Button(frm_popup, text="Close", font=("Courier", 24), padx=5, pady=5, command=popup.destroy, borderwidth=5)
+        btn_close.grid(row=1, column=0, padx=10, pady=(5, 10))
+        popup.update()
+        popup.grab_set_global()
+        popup.focus_force()
+        parent.wait_window(popup)
+        parent.protocol("WM_DELETE_WINDOW", parent.destroy)
+
 #----------- APP CLASS -----------
 class App():
     def __init__(self):
         self.app = Tk()
         self.app.title("tlhIngan Hol ghojmoHwI' boQ")
-        self.height = 420
+        self.height = 390
         self.width = 930
         self.app.geometry(f"{self.width}x{self.height}")
         #Master Frame, is the master frame of the window, gives a nice border.
@@ -33,7 +50,7 @@ class App():
         self.disclaimer = [None, None]
         #Buttons
         self.t_verb_prefix = [None, None]
-        self.t_body = [None, None]
+        self.t_imperative = [None, None]
         self.t_rlocation = [None, None]
         self.fc_verb_prefix = [None, None]
         self.fc_pronoun = [None, None]
@@ -88,9 +105,9 @@ class App():
         self.t_verb_prefix[1] = Button(self.t_verb_prefix[0], text="Verb Prefix", width=APP_T_BTN_WIDTH, command=self.show_verb_prefix_table)
         self.t_verb_prefix[1].grid(sticky="")
 
-        self.t_body[0] = SubFrame(self.frm_master, 4, 0, APP_MINSIZE_ROW, APP_MINSIZE_COL)
-        self.t_body[1] = Button(self.t_body[0], text="Body Parts", width=APP_T_BTN_WIDTH, command=self.show_body_table)
-        self.t_body[1].grid(sticky="")
+        self.t_imperative[0] = SubFrame(self.frm_master, 4, 0, APP_MINSIZE_ROW, APP_MINSIZE_COL)
+        self.t_imperative[1] = Button(self.t_imperative[0], text="Imperative Prefix", width=APP_T_BTN_WIDTH, command=self.show_imperative_table)
+        self.t_imperative[1].grid(sticky="")
 
         self.t_rlocation[0] = SubFrame(self.frm_master, 5, 0, APP_MINSIZE_ROW, APP_MINSIZE_COL)
         self.t_rlocation[1] = Button(self.t_rlocation[0], text="Relative Locations", width=APP_T_BTN_WIDTH, command=self.show_rlocation_table)
@@ -157,17 +174,12 @@ class App():
     def show_verb_prefix_table(self):
         VerbPrefixTable(self.app)
     
-    def show_body_table(self):
-        print("Show Body Table")
-        #BodyTable(self.app)
+    def show_imperative_table(self):
+        ImperativePrefixTable(self.app)
 
     def show_rlocation_table(self):
         print("Show Relative Location Table")
         #RLocationTable(self.app)
-
-    def show_verb_prefix_cards(self):
-        #This is not currently used, see commented out calling button for more details.
-        FlashCards(self.app, "Verb Pronoun Prefixes", VERB_BASIC_PREFIXES, self.fc_prime_lang.get())
 
     def show_pronoun_cards(self):
         FlashCards(self.app, "Pronouns", PRONOUNS, self.fc_prime_lang.get())
@@ -185,7 +197,7 @@ class App():
         FlashCards(self.app, "Adverbs", ADVERBS, self.fc_prime_lang.get())
 
     def show_adjective_cards(self):
-        FlashCards(self.app, "Adjectives", ADJECTIVES, self.fc_prime_lang.get())
+        FlashCards(self.app, "Adjectives (Be Verbs)", ADJECTIVES, self.fc_prime_lang.get())
 
     def show_people_cards(self):
         FlashCards(self.app, "People", PEOPLE, self.fc_prime_lang.get())
@@ -377,7 +389,7 @@ class VerbPrefixTable():
         self.dict = database.get_tables_type(VERB_BASIC_PREFIXES)
         self.setup_ui()  # Set up the specific UI elements
         self.set_answer_key()
-        self.set_null() #I-me, you-you, I-us etc are NOT VALID for a prefix ("---"), this is NOT the same as 0 for the combination does not have a prefix.
+        self.set_null() #I-me, you-you, I-us etc are NOT VALID for a prefix ("---"), this is NOT the same as 0 for combinations do not have a prefix.
 
     def setup_ui(self):
         self.root.resizable(width=False, height=False)
@@ -385,7 +397,6 @@ class VerbPrefixTable():
         #Master Frame - gives a nice outer ridge boarder.
         self.frm_master = Frame(self.root, relief=RIDGE, borderwidth=5)
         self.frm_master.grid(row=0, column=0, padx=10, pady=10)
-        #self.frm_master["bg"] = "yellow"
     
         # Column Names
         self.col_labels[0] = self.dict[0] 
@@ -413,7 +424,7 @@ class VerbPrefixTable():
             self.row_labels[2][j]["fg"] = VP_ROW_HDR_FG
             self.row_labels[2][j]["bg"] = VP_ROW_HDR_BG
         
-        #Set up all our entries, there are two less rows and 1 less columns because of the headers.
+        #Set up all our entries, grid position needs to take into account two row and 1 column difference.
         for i in range(0, self.entry_rows):
             for j in range (0, self.entry_cols):
                 self.entry_box[0][i][j] = SubFrame(self.frm_master, i+2, j+1, VP_MINSIZE_ROW, VP_MINSIZE_COL)
@@ -458,26 +469,9 @@ class VerbPrefixTable():
                     self.entry_box[1][i][j]["bg"] = VP_BG_WRONG
                     qapla = False
         if qapla:
-            self.result_popup("Success", "Qapla'!")
+            result_popup(self.root, "Success", "Qapla'!")
         else:
-            self.result_popup("Failure", "ghobe'!")
-
-    def result_popup(self, title, text):
-        self.root.protocol("WM_DELETE_WINDOW", lambda: None)
-        popup = Toplevel(self.root)
-        popup.title(title)
-        popup.transient(self.root)
-        frm_popup = Frame(popup, relief=GROOVE, height=180, width=180, borderwidth=5)
-        frm_popup.grid(row=0, column=0, padx=10, pady=10)
-        lbl_result = Label(frm_popup, text=text, font=("Courier", 24), padx=5, pady=5)
-        lbl_result.grid(row=0, column=0, padx=10, pady=(10,5))
-        btn_close = Button(frm_popup, text="Close", font=("Courier", 24), padx=5, pady=5, command=popup.destroy, borderwidth=5)
-        btn_close.grid(row=1, column=0, padx=10, pady=(5, 10))
-        popup.update()
-        popup.grab_set_global()
-        popup.focus_force()
-        self.root.wait_window(popup)
-        self.root.protocol("WM_DELETE_WINDOW", self.root.destroy)
+            result_popup(self.root, "Failure", "ghobe'!")
 
     def show_key(self):
         self.clear() #Clear existing information if any.
@@ -497,3 +491,115 @@ class VerbPrefixTable():
                 if self.entry_box[1][i][j].get() != "---":
                     self.entry_box[1][i][j].delete(0, END) #Clear existing information, if any.
                     self.entry_box[1][i][j]["bg"] = VP_BG_ENTRY #Clear the background if the user ran a test.
+
+class ImperativePrefixTable():
+    def __init__(self, master):
+        self.root = Toplevel(master)
+        self.height = (IP_MINSIZE_ROW_0 + ((IP_MINSIZE_ROW*4) + 30))
+        self.width = (IP_MINSIZE_COL_0 + ((IP_MINSIZE_COL*5) + 30))
+        self.root.title("Verb Prefix Table!")
+        self.root.geometry(f"{self.width}x{self.height}")
+        self.frm_rows, self.frm_cols = (2, 6)
+        self.entry_rows, self.entry_cols = (2, 5)
+        self.frm_master = None
+        #For header labels 0 is the label, 1 is the sub frame, 2 is the label widget 
+        self.col_labels = [[None for j in range(self.frm_cols)] for i in range(3)]
+        self.row_labels = [[None for j in range(self.frm_rows)] for i in range(3)]
+        self.entry_box = [[[None for j in range(self.entry_cols)] for i in range(self.entry_rows)] for h in range(2)]
+        self.answer_key = [["" for j in range(self.entry_cols)] for i in range(self.entry_rows)]
+        self.btn_show_key = [None, None]
+        self.btn_clear = [None, None]
+        self.btn_score_test = [None, None]
+        #dict, 0 Col Headers, 1 Row Headers, 2 Answer Key
+        self.dict = database.get_tables_type(VERB_IMPERATIVES_PREFIXES)
+        self.setup_ui()  # Set up the specific UI elements
+        self.set_answer_key()
+
+    def setup_ui(self):
+        self.root.resizable(width=False, height=False)
+        
+        #Master Frame - gives a nice outer ridge boarder.
+        self.frm_master = Frame(self.root, relief=RIDGE, borderwidth=5, width=(IP_MINSIZE_COL_0 + (IP_MINSIZE_COL*6)), height=(IP_MINSIZE_ROW_0 + (IP_MINSIZE_ROW*3)))
+        self.frm_master.grid(row=0, column=0, padx=10, pady=10)
+
+        # Column Names
+        self.col_labels[0] = self.dict[0] 
+        #Set sub frames, colors and other attributes
+        for i in range(self.frm_cols):
+            if i == 0:
+                self.col_labels[1][0] = SubFrame(self.frm_master, 0, 0, IP_MINSIZE_ROW_0, IP_MINSIZE_COL_0)
+            else:
+                self.col_labels[1][i] = SubFrame(self.frm_master, 0, i, IP_MINSIZE_ROW_0, IP_MINSIZE_COL)
+            self.col_labels[1][i]["bg"] = IP_COL_HDR_BG
+            self.col_labels[2][i] = Label(self.col_labels[1][i], text=self.col_labels[0][i])
+            self.col_labels[2][i].grid(row=0, column=0)
+            self.col_labels[2][i].config(font =(IP_ALL_HDR_FONT, IP_ALL_HDR_FONT_SIZE))
+            self.col_labels[2][i]["fg"] = IP_COL_HDR_FG
+            self.col_labels[2][i]["bg"] = IP_COL_HDR_BG
+
+        # Rows Names
+        self.row_labels[0] = self.dict[1] 
+        for j in range(self.frm_rows):
+            self.row_labels[1][j] = SubFrame(self.frm_master, j+1, 0, IP_MINSIZE_ROW, IP_MINSIZE_COL_0)
+            self.row_labels[1][j]["bg"] = IP_COL_HDR_BG
+            self.row_labels[2][j] = Label(self.row_labels[1][j], text=self.row_labels[0][j])
+            self.row_labels[2][j].grid(row=0, column=0)
+            self.row_labels[2][j].config(font =(IP_ALL_HDR_FONT, IP_ALL_HDR_FONT_SIZE))
+            self.row_labels[2][j]["fg"] = IP_ROW_HDR_FG
+            self.row_labels[2][j]["bg"] = IP_ROW_HDR_BG
+
+        #Set up all our entries, there is a one row and one column offset.
+        for i in range(0, self.entry_rows):
+            for j in range (0, self.entry_cols):
+                self.entry_box[0][i][j] = SubFrame(self.frm_master, i+1, j+1, IP_MINSIZE_ROW, IP_MINSIZE_COL)
+                self.entry_box[1][i][j] = Entry(self.entry_box[0][i][j], relief="sunken", width=IP_ENTRY_WIDTH)
+                self.entry_box[1][i][j].grid(sticky="")
+                self.entry_box[1][i][j].config(font =(IP_FONT, IP_FONT_SIZE))
+
+        #Add Buttons to show answers for study and referenece, a clear button, and a submit test button.
+        self.btn_show_key[0] = SubFrame(self.frm_master, 4, 0, IP_MINSIZE_ROW, (IP_MINSIZE_COL_0 + IP_MINSIZE_COL), columnspan=2)
+        self.btn_show_key[1] = Button(self.btn_show_key[0], text="moHaq yIcha' (Show)", command=self.show_key)
+        self.btn_show_key[1].grid(sticky="")
+        
+        self.btn_clear[0] = SubFrame(self.frm_master, 4, 3, IP_MINSIZE_ROW, IP_MINSIZE_COL*3, columnspan=3)
+        self.btn_clear[1] = Button(self.btn_clear[0], text="wa'chaw yIteq (Clear)", command=self.clear)
+        self.btn_clear[1].grid(sticky="")
+        
+        self.btn_score_test[0] = SubFrame(self.frm_master, 5, 1, IP_MINSIZE_ROW, IP_MINSIZE_COL*3, columnspan=3)
+        self.btn_score_test[1] = Button(self.btn_score_test[0], text="'el (Submit)", command=self.score_test)
+        self.btn_score_test[1].grid(sticky="")
+    
+    def set_answer_key(self):
+        self.answer_key = self.dict[2] 
+
+    # Button functions
+    def score_test(self):
+        qapla = True
+        for i in range(0, self.entry_rows):
+            for j in range (0, self.entry_cols):
+                #We do check the invalid combinations as they are disabled and cannot change.
+                if self.entry_box[1][i][j].get() == self.answer_key[i][j]:
+                    self.entry_box[1][i][j]["bg"] = IP_BG_CORRECT
+                else:
+                    self.entry_box[1][i][j]["bg"] = IP_BG_WRONG
+                    qapla = False
+        if qapla:
+            result_popup(self.root, "Success", "Qapla'!")
+        else:
+            result_popup(self.root, "Failure", "ghobe'!")
+
+    def show_key(self):
+        self.clear() #Clear existing information if any.
+        self.btn_score_test[1].config(state="disabled") #We disable the button to submit as this is for reference.
+        for i in range(0, self.entry_rows):
+            for j in range (0, self.entry_cols):
+                #We do not insert the invalid combinations, they are set at the window intialization and never changed.
+                self.entry_box[1][i][j].insert(0, self.answer_key[i][j]) #Enter the information from our answer key.
+                self.entry_box[1][i][j]["bg"] = IP_BG_REF #Shows this is for reference.
+
+    def clear(self):
+         self.btn_score_test[1].config(state="active") #We enable the button to submit as the table is cleared.
+         for i in range(0, self.entry_rows):
+            for j in range (0, self.entry_cols):
+                self.entry_box[1][i][j].delete(0, END) #Clear existing information, if any.
+                self.entry_box[1][i][j]["bg"] = IP_BG_ENTRY #Clear the background if the user ran a test.
