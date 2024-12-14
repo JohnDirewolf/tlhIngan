@@ -20,6 +20,7 @@ ADVERBS = "adverbs"
 NOUNS = "nouns"
 TIME = "time"
 QUESTIONS = "questions"
+CONJUNCTIONS = "conjunctions"
 
 #App Constants
 APP_MINSIZE_ROW = 30
@@ -52,8 +53,6 @@ VP_ROW_HDR_BG="grey"
 VP_FG="black"
 VP_BG_REF="lightgrey"
 VP_BG_ENTRY="white"
-VP_BG_CORRECT = "lightgreen"
-VP_BG_WRONG = "pink"
 #Verb Previx Table Fonts
 VP_ALL_HDR_FONT = "Courier"
 VP_ALL_HDR_FONT_SIZE = 12
@@ -75,13 +74,34 @@ IP_ROW_HDR_BG="grey"
 IP_FG="black"
 IP_BG_REF="lightgrey"
 IP_BG_ENTRY="white"
-IP_BG_CORRECT = "lightgreen"
-IP_BG_WRONG = "pink"
 #Imperative Previx Table Fonts
 IP_ALL_HDR_FONT = "Courier"
 IP_ALL_HDR_FONT_SIZE = 12
 IP_FONT = "Courier"
 IP_FONT_SIZE = 12
+
+# Conjunction Table Constants
+C_ENTRY_WIDTH=5 #This sets the width of all all the entry windows.
+#Set the Grid to be of consistent height and width.
+C_MINSIZE_COL = 120
+C_MINSIZE_ROW = 30
+#Verb Prefix Table Colors
+C_COL_HDR_FG="purple"
+C_COL_HDR_BG="grey"
+C_ROW_HDR_FG="blue"
+C_ROW_HDR_BG="grey"
+C_FG="black"
+C_BG_REF="lightgrey"
+C_BG_ENTRY="white"
+#Imperative Previx Table Fonts
+C_ALL_HDR_FONT = "Courier"
+C_ALL_HDR_FONT_SIZE = 12
+C_FONT = "Courier"
+C_FONT_SIZE = 12
+
+#General Table Constants
+T_BG_CORRECT = "lightgreen"
+T_BG_WRONG = "pink"
 
 #Flash Card Constants.
 #Set the Grid to be of consistent height and width.
