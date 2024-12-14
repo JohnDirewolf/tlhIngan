@@ -19,6 +19,7 @@ ADJECTIVES = "adjectives"
 ADVERBS = "adverbs"
 NOUNS = "nouns"
 TIME = "time"
+QUESTIONS = "questions"
 
 #App Constants
 APP_MINSIZE_ROW = 30
