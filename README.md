@@ -12,18 +12,19 @@ During all this self learning I made a lot of flash cards and tests and games to
 Now I have used Python and the tkinter library to create an app to assist in learning Klingon with similar techniques I have been using over the years.
 
 ## Contents
-main.py - the main file that creates the app window.
-classes.py - contains the classes for the tables and flash cards
-constants.py - all the color, height, width, fonts, and other formatting constants. Also constants for the JSON file keys.
-database.py - loads the dictionaries and provides them to the app.
+- `main.py`: the main file that creates the app window.
+- `classes.py`: contains the classes for the tables and flash cards
+- `constants.py`: all the color, height, width, fonts, and other formatting constants. Also constants for the JSON file keys.
+- `database.py`: loads the dictionaries and provides them to the app.
 /dictionary
-    dictionary.json - Contains the Klingon language in a dictionary of lists using the constants from constants.py as the list key and each list is dictionaries of the 
+    - `dictionary.json` - Contains the Klingon language in a dictionary of lists using the constants from constants.py as the list key and each list is dictionaries of the 
                       English, Klingon, and if needed Syntactic Type
-    tables.json - Contains the column and row headers as well as the correct Klingon for all the entry boxes. It is a dictionary of lists of arrays, using the constants 
+    - `tables.json` - Contains the column and row headers as well as the correct Klingon for all the entry boxes. It is a dictionary of lists of arrays, using the constants 
                   from constants.py as the list key. Index 0 is the column headers, 1 is the row headers, and 3 is a list, 2-D or other format, for the table.  
 
 ## Requirements
 Python 3.12.2 or better
+tkinter package (if it is not part of your Python distribution already)
 
 ## Installation & Setup
 
@@ -34,13 +35,19 @@ Python 3.12.2 or better
    ```
 
 2. Install Python 3.12+ if needed.
-   To install  on Ubuntu, run the following commands in your terminal:
+   To install on Ubuntu, run the following commands in your terminal:
     ```bash
     sudo apt update
     sudo apt install python3.12
     ```
 
-3. Running the Application
+3. Install tkinter package ("Tk interface") if needed.
+   To install on Ubuntu, run the following commands in your terminal:
+    ```bash
+    sudo apt-get install python3-tk
+    ```
+
+4. Running the Application
    To run the application:
       ```bash
       python main.py
