@@ -5,7 +5,6 @@ ENGLISH = "English"
 KLINGON = "Klingon"
 TYPE = "Type"
 #Word Types
-ADJECTIVES = "adjectives"
 ADVERBS = "adverbs"
 ANIMALS = "animals"
 BODY_PARTS = "body_parts"
@@ -25,7 +24,9 @@ RELATIONSHIPS = "relationships"
 TIME = "time"
 VERB_BASIC_PREFIXES = "verb_basic_prefixes"
 VERB_IMPERATIVES_PREFIXES = "verb_imperatives_prefixes"
+VERB_TO_BE = "verb_to_be"
 VERBS = "verbs"
+
 
 #App Constants
 APP_MINSIZE_ROW = 30
