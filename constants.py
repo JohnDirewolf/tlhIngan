@@ -1,17 +1,18 @@
-DEV = True
-
 #Language
 ENGLISH = "English"
 KLINGON = "Klingon"
 TYPE = "Type"
+
 #Word Types
 ADVERBS = "adverbs"
 ANIMALS = "animals"
 BODY_PARTS = "body_parts"
 CLOTHING = "clothing"
 CONJUNCTIONS = "conjunctions"
+EPITHETS = "epithets"
 EXCLAMATIONS = "exclamations"
 FOOD_DRINK = "food_drink"
+INVECTIVES = "invectives"
 NOUNS = "nouns"
 NUMBERS = "numbers"
 PEOPLE = "people"
@@ -26,7 +27,32 @@ VERB_BASIC_PREFIXES = "verb_basic_prefixes"
 VERB_IMPERATIVES_PREFIXES = "verb_imperatives_prefixes"
 VERB_TO_BE = "verb_to_be"
 VERBS = "verbs"
+#Affixes
+NOUN_SUFFIXES = "noun_suffixes"
+PRONOMINAL_PREFIXES = "pronominal_prefixes"
+VERB_SUFFIXES = "verb_suffixes"
+NUMBER_SUFFIXES = "number_suffixes"
+#Affix Types
+N_AUGMENTATIVE_DIMINUTIVE = 1
+N_NUMBER = 2
+N_QUALIFICATION = 3
+N_POSSESSION_SPECIFICATION = 4
+N_SYNTACTIC = 5
 
+V_BASIC = 0
+V_IMPERATIVE = -1
+V_ONESELF_ONE_ANOTHER = 1
+V_VOLITION_PREDISPOSITION = 2
+V_CHANGE = 3
+V_CAUSE = 4
+V_INDEFINITE_SUBJECT_ABILITY = 5
+V_QUALIFICATION = 6
+V_ASPECT = 7
+V_HONORIFIC = 8
+V_SYNTATIC = 9
+V_ROVER = 0
+
+NUM_SUFFIXES = 0
 
 #App Constants
 APP_MINSIZE_ROW = 30
