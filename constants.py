@@ -4,29 +4,29 @@ KLINGON = "Klingon"
 TYPE = "Type"
 
 #Word Types
-ADVERBS = "adverbs"
-ANIMALS = "animals"
-BODY_PARTS = "body_parts"
-CLOTHING = "clothing"
-CONJUNCTIONS = "conjunctions"
-EPITHETS = "epithets"
-EXCLAMATIONS = "exclamations"
-FOOD_DRINK = "food_drink"
-INVECTIVES = "invectives"
-NOUNS = "nouns"
-NUMBERS = "numbers"
-PEOPLE = "people"
-PLACES = "places"
-PLANETS_INHABITANTS = "planets_inhabitants"
-PRONOUNS = "pronouns"
-QUESTIONS = "questions"
-REL_LOCATIONS = "relative_locations"
-RELATIONSHIPS = "relationships"
-TIME = "time"
-VERB_BASIC_PREFIXES = "verb_basic_prefixes"
-VERB_IMPERATIVES_PREFIXES = "verb_imperatives_prefixes"
-VERB_TO_BE = "verb_to_be"
-VERBS = "verbs"
+ADVERBS = ["adverbs", "Adverbs"]
+ANIMALS = ["animals", "Animals"]
+BODY_PARTS = ["body_parts", "Body Parts"]
+CLOTHING = ["clothing", "Clothing"]
+CONJUNCTIONS = ["conjunctions", "Conjunctions"]
+EPITHETS = ["epithets", "Epithets"]
+EXCLAMATIONS = ["exclamations", "Exclamations"]
+FOOD_DRINK = ["food_drink", "Food & Drink"]
+INVECTIVES = ["invectives", "Invectives"]
+NOUNS = ["nouns", "Nouns"]
+NUMBERS = ["numbers", "Numbers"]
+PEOPLE = ["people", "People"]
+PLACES = ["places", "Places"]
+PLANETS_INHABITANTS = ["planets_inhabitants", "Planets & Inhabitants"]
+PRONOUNS = ["pronouns", "Pronouns"]
+QUESTIONS = ["questions", "Questions"]
+REL_LOCATIONS = ["relative_locations", "Locatives"]
+RELATIONSHIPS = ["relationships", "Relationships"]
+TIME = ["time", "Time"]
+VERB_BASIC_PREFIXES = ["verb_basic_prefixes", "Pronominal Prefixes"]
+VERB_IMPERATIVES_PREFIXES = ["verb_imperatives_prefixes", "Imperatives Prefixes"]
+VERB_TO_BE = ["verb_to_be", "To Be Verbs"]
+VERBS = ["verbs", "Verbs"]
 #Affixes
 NOUN_SUFFIXES = "noun_suffixes"
 PRONOMINAL_PREFIXES = "pronominal_prefixes"
@@ -56,10 +56,11 @@ NUM_SUFFIXES = 0
 
 #App Constants
 APP_MINSIZE_ROW = 30
-APP_MINSIZE_COL = 300
+APP_MINSIZE_COL = 200
 APP_T_BTN_WIDTH = 15
 APP_FC_BTN_WIDTH = 15
-APP_RDO_SPACER = 20
+APP_RDO_SPACER = 30
+APP_RDO_FUDGE = 15 # While the SPACER match is all technically correct the way that rdo buttons are generated need some fudge to feel correct
 #App Colors
 APP_FG = "black"
 #App Fonts
