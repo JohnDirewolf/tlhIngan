@@ -92,6 +92,10 @@ VP_ALL_HDR_FONT_SIZE = 12
 VP_FONT = "Courier"
 VP_FONT_SIZE = 12
 
+#Verb Suffix Type Table Contants
+VST_MINSIZE_COL = 6
+VST_MINSIZE_ROW = 30 
+
 # Imperative Prefix Table Constants
 IP_ENTRY_WIDTH=4 #This sets the width of all all the entry windows.
 #Set the Grid to be of consistent height and width.

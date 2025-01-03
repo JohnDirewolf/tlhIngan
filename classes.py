@@ -48,19 +48,8 @@ class App():
         self.tables = [None, None]
         self.flash_cards = [None, None]
         self.disclaimer = [None, None]
-        #Buttons
-        self.t_verb_prefix = [None, None]
-        self.t_imperative = [None, None]
-        self.t_conjunction = [None, None]
-        self.fc_verb_prefix = [None, None]
-        self.fc_pronoun = [None, None]
-        self.fc_body = [None, None]
-        self.fc_rlocation = [None, None]
-        self.fc_verb = [None, None]
-        self.fc_adverb = [None, None]
-        self.fc_adjective = [None, None]
-        self.fc_people = [None, None]
-        self.fc_noun= [None, None]
+        #Buttons - the buttons are just set up and otherwise not dynamic so a single variable is used for setup.
+        self.btn = [None, None]
 
         #Radio
         #radio_button1 = tk.Radiobutton(window, text="Option 1", variable=selected_value, value="option1")
@@ -99,17 +88,21 @@ class App():
         self.tables[1].config(font=(APP_HEADER_FONT, APP_HEADER_SIZE, "bold"))
         self.tables[1]["fg"] = APP_FG
 
-        self.t_verb_prefix[0] = SubFrame(self.frm_master, 3, 0, APP_MINSIZE_ROW, APP_MINSIZE_COL)
-        self.t_verb_prefix[1] = Button(self.t_verb_prefix[0], text="Verb Prefix", width=APP_T_BTN_WIDTH, command=self.show_verb_prefix_table)
-        self.t_verb_prefix[1].grid(sticky="")
+        self.btn[0] = SubFrame(self.frm_master, 3, 0, APP_MINSIZE_ROW, APP_MINSIZE_COL)
+        self.btn[1] = Button(self.btn[0], text="Verb Prefix", width=APP_T_BTN_WIDTH, command=self.show_verb_prefix_table)
+        self.btn[1].grid(sticky="")
 
-        self.t_imperative[0] = SubFrame(self.frm_master, 4, 0, APP_MINSIZE_ROW, APP_MINSIZE_COL)
-        self.t_imperative[1] = Button(self.t_imperative[0], text="Imperative Prefix", width=APP_T_BTN_WIDTH, command=self.show_imperative_table)
-        self.t_imperative[1].grid(sticky="")
+        self.btn[0] = SubFrame(self.frm_master, 4, 0, APP_MINSIZE_ROW, APP_MINSIZE_COL)
+        self.btn[1] = Button(self.btn[0], text="Imperative Prefix", width=APP_T_BTN_WIDTH, command=self.show_imperative_table)
+        self.btn[1].grid(sticky="")
 
-        self.t_conjunction[0] = SubFrame(self.frm_master, 5, 0, APP_MINSIZE_ROW, APP_MINSIZE_COL)
-        self.t_conjunction[1] = Button(self.t_conjunction[0], text="Conjunctions", width=APP_T_BTN_WIDTH, command=self.show_conjunction_table)
-        self.t_conjunction[1].grid(sticky="")
+        self.btn[0] = SubFrame(self.frm_master, 5, 0, APP_MINSIZE_ROW, APP_MINSIZE_COL)
+        self.btn[1] = Button(self.btn[0], text="Conjunctions", width=APP_T_BTN_WIDTH, command=self.show_conjunction_table)
+        self.btn[1].grid(sticky="")
+
+        self.btn[0] = SubFrame(self.frm_master, 6, 0, APP_MINSIZE_ROW, APP_MINSIZE_COL)
+        self.btn[1] = Button(self.btn[0], text="Verb Suffix", width=APP_T_BTN_WIDTH, command=self.show_verb_suffix_table)
+        self.btn[1].grid(sticky="")
 
         #Blank frame, all it does is fill the middle cell of the row, this allows this row to define the columns nicely
         #SubFrame(self.frm_master, 1, 1, APP_MINSIZE_ROW, APP_MINSIZE_COL)
@@ -132,85 +125,85 @@ class App():
         self.rdo_klingon[1] = Radiobutton(self.rdo_klingon[0], text="Klingon", variable=self.fc_prime_lang, value=KLINGON)
         self.rdo_klingon[1].grid(sticky="w")
 
-        self.fc_adverb[0] = SubFrame(self.frm_master, 3, 1, APP_MINSIZE_ROW, APP_MINSIZE_COL)
-        self.fc_adverb[1] = Button(self.fc_adverb[0], text=ADVERBS[1], width=APP_FC_BTN_WIDTH, command=lambda: self.show_cards(ADVERBS))
-        self.fc_adverb[1].grid(sticky="")
+        self.btn[0] = SubFrame(self.frm_master, 3, 1, APP_MINSIZE_ROW, APP_MINSIZE_COL)
+        self.btn[1] = Button(self.btn[0], text=ADVERBS[1], width=APP_FC_BTN_WIDTH, command=lambda: self.show_cards(ADVERBS))
+        self.btn[1].grid(sticky="")
 
-        self.fc_adverb[0] = SubFrame(self.frm_master, 4, 1, APP_MINSIZE_ROW, APP_MINSIZE_COL)
-        self.fc_adverb[1] = Button(self.fc_adverb[0], text=ANIMALS[1], width=APP_FC_BTN_WIDTH, command=lambda: self.show_cards(ANIMALS))
-        self.fc_adverb[1].grid(sticky="")  
+        self.btn[0] = SubFrame(self.frm_master, 4, 1, APP_MINSIZE_ROW, APP_MINSIZE_COL)
+        self.btn[1] = Button(self.btn[0], text=ANIMALS[1], width=APP_FC_BTN_WIDTH, command=lambda: self.show_cards(ANIMALS))
+        self.btn[1].grid(sticky="")  
 
-        self.fc_adverb[0] = SubFrame(self.frm_master, 5, 1, APP_MINSIZE_ROW, APP_MINSIZE_COL)
-        self.fc_adverb[1] = Button(self.fc_adverb[0], text=BODY_PARTS[1], width=APP_FC_BTN_WIDTH, command=lambda: self.show_cards(BODY_PARTS))
-        self.fc_adverb[1].grid(sticky="")  
+        self.btn[0] = SubFrame(self.frm_master, 5, 1, APP_MINSIZE_ROW, APP_MINSIZE_COL)
+        self.btn[1] = Button(self.btn[0], text=BODY_PARTS[1], width=APP_FC_BTN_WIDTH, command=lambda: self.show_cards(BODY_PARTS))
+        self.btn[1].grid(sticky="")  
 
-        self.fc_adverb[0] = SubFrame(self.frm_master, 6, 1, APP_MINSIZE_ROW, APP_MINSIZE_COL)
-        self.fc_adverb[1] = Button(self.fc_adverb[0], text=CLOTHING[1], width=APP_FC_BTN_WIDTH, command=lambda: self.show_cards(CLOTHING))
-        self.fc_adverb[1].grid(sticky="")  
+        self.btn[0] = SubFrame(self.frm_master, 6, 1, APP_MINSIZE_ROW, APP_MINSIZE_COL)
+        self.btn[1] = Button(self.btn[0], text=CLOTHING[1], width=APP_FC_BTN_WIDTH, command=lambda: self.show_cards(CLOTHING))
+        self.btn[1].grid(sticky="")  
 
-        self.fc_adverb[0] = SubFrame(self.frm_master, 7, 1, APP_MINSIZE_ROW, APP_MINSIZE_COL)
-        self.fc_adverb[1] = Button(self.fc_adverb[0], text=EPITHETS[1], width=APP_FC_BTN_WIDTH, command=lambda: self.show_cards(EPITHETS))
-        self.fc_adverb[1].grid(sticky="")
+        self.btn[0] = SubFrame(self.frm_master, 7, 1, APP_MINSIZE_ROW, APP_MINSIZE_COL)
+        self.btn[1] = Button(self.btn[0], text=EPITHETS[1], width=APP_FC_BTN_WIDTH, command=lambda: self.show_cards(EPITHETS))
+        self.btn[1].grid(sticky="")
 
-        self.fc_adverb[0] = SubFrame(self.frm_master, 3, 2, APP_MINSIZE_ROW, APP_MINSIZE_COL)
-        self.fc_adverb[1] = Button(self.fc_adverb[0], text=EXCLAMATIONS[1], width=APP_FC_BTN_WIDTH, command=lambda: self.show_cards(EXCLAMATIONS))
-        self.fc_adverb[1].grid(sticky="")
+        self.btn[0] = SubFrame(self.frm_master, 3, 2, APP_MINSIZE_ROW, APP_MINSIZE_COL)
+        self.btn[1] = Button(self.btn[0], text=EXCLAMATIONS[1], width=APP_FC_BTN_WIDTH, command=lambda: self.show_cards(EXCLAMATIONS))
+        self.btn[1].grid(sticky="")
 
-        self.fc_adverb[0] = SubFrame(self.frm_master, 4, 2, APP_MINSIZE_ROW, APP_MINSIZE_COL)
-        self.fc_adverb[1] = Button(self.fc_adverb[0], text=FOOD_DRINK[1], width=APP_FC_BTN_WIDTH, command=lambda: self.show_cards(FOOD_DRINK))
-        self.fc_adverb[1].grid(sticky="")  
+        self.btn[0] = SubFrame(self.frm_master, 4, 2, APP_MINSIZE_ROW, APP_MINSIZE_COL)
+        self.btn[1] = Button(self.btn[0], text=FOOD_DRINK[1], width=APP_FC_BTN_WIDTH, command=lambda: self.show_cards(FOOD_DRINK))
+        self.btn[1].grid(sticky="")  
 
-        self.fc_adverb[0] = SubFrame(self.frm_master, 5, 2, APP_MINSIZE_ROW, APP_MINSIZE_COL)
-        self.fc_adverb[1] = Button(self.fc_adverb[0], text=INVECTIVES[1], width=APP_FC_BTN_WIDTH, command=lambda: self.show_cards(INVECTIVES))
-        self.fc_adverb[1].grid(sticky="")  
+        self.btn[0] = SubFrame(self.frm_master, 5, 2, APP_MINSIZE_ROW, APP_MINSIZE_COL)
+        self.btn[1] = Button(self.btn[0], text=INVECTIVES[1], width=APP_FC_BTN_WIDTH, command=lambda: self.show_cards(INVECTIVES))
+        self.btn[1].grid(sticky="")  
 
-        self.fc_adverb[0] = SubFrame(self.frm_master, 6, 2, APP_MINSIZE_ROW, APP_MINSIZE_COL)
-        self.fc_adverb[1] = Button(self.fc_adverb[0], text=NOUNS[1], width=APP_FC_BTN_WIDTH, command=lambda: self.show_cards(NOUNS))
-        self.fc_adverb[1].grid(sticky="")  
+        self.btn[0] = SubFrame(self.frm_master, 6, 2, APP_MINSIZE_ROW, APP_MINSIZE_COL)
+        self.btn[1] = Button(self.btn[0], text=NOUNS[1], width=APP_FC_BTN_WIDTH, command=lambda: self.show_cards(NOUNS))
+        self.btn[1].grid(sticky="")  
 
-        self.fc_adverb[0] = SubFrame(self.frm_master, 7, 2, APP_MINSIZE_ROW, APP_MINSIZE_COL)
-        self.fc_adverb[1] = Button(self.fc_adverb[0], text=NUMBERS[1], width=APP_FC_BTN_WIDTH, command=lambda: self.show_cards(NUMBERS))
-        self.fc_adverb[1].grid(sticky="")
+        self.btn[0] = SubFrame(self.frm_master, 7, 2, APP_MINSIZE_ROW, APP_MINSIZE_COL)
+        self.btn[1] = Button(self.btn[0], text=NUMBERS[1], width=APP_FC_BTN_WIDTH, command=lambda: self.show_cards(NUMBERS))
+        self.btn[1].grid(sticky="")
 
-        self.fc_adverb[0] = SubFrame(self.frm_master, 3, 3, APP_MINSIZE_ROW, APP_MINSIZE_COL)
-        self.fc_adverb[1] = Button(self.fc_adverb[0], text=PEOPLE[1], width=APP_FC_BTN_WIDTH, command=lambda: self.show_cards(PEOPLE))
-        self.fc_adverb[1].grid(sticky="")
+        self.btn[0] = SubFrame(self.frm_master, 3, 3, APP_MINSIZE_ROW, APP_MINSIZE_COL)
+        self.btn[1] = Button(self.btn[0], text=PEOPLE[1], width=APP_FC_BTN_WIDTH, command=lambda: self.show_cards(PEOPLE))
+        self.btn[1].grid(sticky="")
 
-        self.fc_adverb[0] = SubFrame(self.frm_master, 4, 3, APP_MINSIZE_ROW, APP_MINSIZE_COL)
-        self.fc_adverb[1] = Button(self.fc_adverb[0], text=PLACES[1], width=APP_FC_BTN_WIDTH, command=lambda: self.show_cards(PLACES))
-        self.fc_adverb[1].grid(sticky="")  
+        self.btn[0] = SubFrame(self.frm_master, 4, 3, APP_MINSIZE_ROW, APP_MINSIZE_COL)
+        self.btn[1] = Button(self.btn[0], text=PLACES[1], width=APP_FC_BTN_WIDTH, command=lambda: self.show_cards(PLACES))
+        self.btn[1].grid(sticky="")  
 
-        self.fc_adverb[0] = SubFrame(self.frm_master, 5, 3, APP_MINSIZE_ROW, APP_MINSIZE_COL)
-        self.fc_adverb[1] = Button(self.fc_adverb[0], text=PLANETS_INHABITANTS[1], width=APP_FC_BTN_WIDTH, command=lambda: self.show_cards(PLANETS_INHABITANTS))
-        self.fc_adverb[1].grid(sticky="")  
+        self.btn[0] = SubFrame(self.frm_master, 5, 3, APP_MINSIZE_ROW, APP_MINSIZE_COL)
+        self.btn[1] = Button(self.btn[0], text=PLANETS_INHABITANTS[1], width=APP_FC_BTN_WIDTH, command=lambda: self.show_cards(PLANETS_INHABITANTS))
+        self.btn[1].grid(sticky="")  
 
-        self.fc_adverb[0] = SubFrame(self.frm_master, 6, 3, APP_MINSIZE_ROW, APP_MINSIZE_COL)
-        self.fc_adverb[1] = Button(self.fc_adverb[0], text=PRONOUNS[1], width=APP_FC_BTN_WIDTH, command=lambda: self.show_cards(PRONOUNS))
-        self.fc_adverb[1].grid(sticky="")  
+        self.btn[0] = SubFrame(self.frm_master, 6, 3, APP_MINSIZE_ROW, APP_MINSIZE_COL)
+        self.btn[1] = Button(self.btn[0], text=PRONOUNS[1], width=APP_FC_BTN_WIDTH, command=lambda: self.show_cards(PRONOUNS))
+        self.btn[1].grid(sticky="")  
 
-        self.fc_adverb[0] = SubFrame(self.frm_master, 7, 3, APP_MINSIZE_ROW, APP_MINSIZE_COL)
-        self.fc_adverb[1] = Button(self.fc_adverb[0], text=QUESTIONS[1], width=APP_FC_BTN_WIDTH, command=lambda: self.show_cards(QUESTIONS))
-        self.fc_adverb[1].grid(sticky="")
+        self.btn[0] = SubFrame(self.frm_master, 7, 3, APP_MINSIZE_ROW, APP_MINSIZE_COL)
+        self.btn[1] = Button(self.btn[0], text=QUESTIONS[1], width=APP_FC_BTN_WIDTH, command=lambda: self.show_cards(QUESTIONS))
+        self.btn[1].grid(sticky="")
 
-        self.fc_adverb[0] = SubFrame(self.frm_master, 3, 4, APP_MINSIZE_ROW, APP_MINSIZE_COL)
-        self.fc_adverb[1] = Button(self.fc_adverb[0], text=REL_LOCATIONS[1], width=APP_FC_BTN_WIDTH, command=lambda: self.show_cards(REL_LOCATIONS))
-        self.fc_adverb[1].grid(sticky="")
+        self.btn[0] = SubFrame(self.frm_master, 3, 4, APP_MINSIZE_ROW, APP_MINSIZE_COL)
+        self.btn[1] = Button(self.btn[0], text=REL_LOCATIONS[1], width=APP_FC_BTN_WIDTH, command=lambda: self.show_cards(REL_LOCATIONS))
+        self.btn[1].grid(sticky="")
 
-        self.fc_adverb[0] = SubFrame(self.frm_master, 4, 4, APP_MINSIZE_ROW, APP_MINSIZE_COL)
-        self.fc_adverb[1] = Button(self.fc_adverb[0], text=RELATIONSHIPS[1], width=APP_FC_BTN_WIDTH, command=lambda: self.show_cards(RELATIONSHIPS))
-        self.fc_adverb[1].grid(sticky="")  
+        self.btn[0] = SubFrame(self.frm_master, 4, 4, APP_MINSIZE_ROW, APP_MINSIZE_COL)
+        self.btn[1] = Button(self.btn[0], text=RELATIONSHIPS[1], width=APP_FC_BTN_WIDTH, command=lambda: self.show_cards(RELATIONSHIPS))
+        self.btn[1].grid(sticky="")  
 
-        self.fc_adverb[0] = SubFrame(self.frm_master, 5, 4, APP_MINSIZE_ROW, APP_MINSIZE_COL)
-        self.fc_adverb[1] = Button(self.fc_adverb[0], text=TIME[1], width=APP_FC_BTN_WIDTH, command=lambda: self.show_cards(TIME))
-        self.fc_adverb[1].grid(sticky="")  
+        self.btn[0] = SubFrame(self.frm_master, 5, 4, APP_MINSIZE_ROW, APP_MINSIZE_COL)
+        self.btn[1] = Button(self.btn[0], text=TIME[1], width=APP_FC_BTN_WIDTH, command=lambda: self.show_cards(TIME))
+        self.btn[1].grid(sticky="")  
 
-        self.fc_adverb[0] = SubFrame(self.frm_master, 6, 4, APP_MINSIZE_ROW, APP_MINSIZE_COL)
-        self.fc_adverb[1] = Button(self.fc_adverb[0], text=VERB_TO_BE[1], width=APP_FC_BTN_WIDTH, command=lambda: self.show_cards(VERB_TO_BE))
-        self.fc_adverb[1].grid(sticky="")  
+        self.btn[0] = SubFrame(self.frm_master, 6, 4, APP_MINSIZE_ROW, APP_MINSIZE_COL)
+        self.btn[1] = Button(self.btn[0], text=VERB_TO_BE[1], width=APP_FC_BTN_WIDTH, command=lambda: self.show_cards(VERB_TO_BE))
+        self.btn[1].grid(sticky="")  
 
-        self.fc_adverb[0] = SubFrame(self.frm_master, 7, 4, APP_MINSIZE_ROW, APP_MINSIZE_COL)
-        self.fc_adverb[1] = Button(self.fc_adverb[0], text=VERBS[1], width=APP_FC_BTN_WIDTH, command=lambda: self.show_cards(VERBS))
-        self.fc_adverb[1].grid(sticky="")
+        self.btn[0] = SubFrame(self.frm_master, 7, 4, APP_MINSIZE_ROW, APP_MINSIZE_COL)
+        self.btn[1] = Button(self.btn[0], text=VERBS[1], width=APP_FC_BTN_WIDTH, command=lambda: self.show_cards(VERBS))
+        self.btn[1].grid(sticky="")
 
         self.disclaimer[0] = SubFrame(self.frm_master, 8, 0, APP_MINSIZE_ROW*5, APP_MINSIZE_COL*5, columnspan=5)
         self.disclaimer[1] = Label(self.disclaimer[0], text="""The Klingon language reference used is 'The Klingon Dictionary' by Marc Okrand.\nThis app provides various practice drills to help memorize things like verb prefixes and locations.\nThis app does NOT provide information on pronounciation or grammar.\nAlso this app does not include new additions to the language outside of 'The Klingon Dictionary'.\nTo learn more about this beautiful langauge, see 'The Klingon Dictionary' and other books by Marc Okrand.""")
@@ -226,6 +219,9 @@ class App():
 
     def show_conjunction_table(self):
         ConjunctionTable(self.app)
+
+    def show_verb_suffix_table(self):
+        VerbTypeTable(self.app)
 
     def show_cards(self, card_type):
         FlashCards(self.app, card_type, self.fc_prime_lang.get())
@@ -737,3 +733,26 @@ class ConjunctionTable():
             for j in range (0, self.entry_cols):
                 self.entry_box[1][i][j].delete(0, END) #Clear existing information, if any.
                 self.entry_box[1][i][j]["bg"] = C_BG_ENTRY #Clear the background if the user ran a test.
+
+class VerbTypeTable():
+    def __init__(self, master):
+        self.root = Toplevel(master)
+        self.height = (VST_MINSIZE_ROW*8)
+        self.width = (VST_MINSIZE_COL*7 + 30)
+        self.root.title("Verb Suffix Type Table!")
+        self.root.geometry(f"{self.width}x{self.height}")
+        self.frm_rows, self.frm_cols = (10, 7)
+        self.frm_master = None
+        self.btn_show_key = [None, None]
+        self.btn_clear = [None, None]
+        self.btn_score_test = [None, None]
+        self.dict = database.get_affixes_type(VERB_SUFFIXES)
+        self.setup_ui()  # Set up the specific UI elements
+        #self.set_answer_key()
+
+    def setup_ui(self):   
+        self.root.resizable(width=False, height=False)
+        
+        #Master Frame - gives a nice outer ridge boarder.
+        self.frm_master = Frame(self.root, relief=RIDGE, borderwidth=5)
+        self.frm_master.grid(row=0, column=0, padx=10, pady=10)   

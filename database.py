@@ -10,7 +10,7 @@ _affixes_dict = {} #{ENGLISH: "", KLINGON: "", TYPE: #}
 _tables_dict = {} #Custom for each table, generally list of lists, 0 - Column Headers, 1 - Row Headers, 2 - 2D list of data, answers
 
 def load_dict():
-    global _klingon_dict, _tables_dict
+    global _klingon_dict, _affixes_dict, _tables_dict
     with open('dictionary/dictionary.json', 'r') as openfile:
         _klingon_dict = json.load(openfile)
     with open('dictionary/affixes.json', 'r') as openfile:
