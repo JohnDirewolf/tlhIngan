@@ -100,9 +100,9 @@ class App():
         self.btn[1] = Button(self.btn[0], text="Conjunctions", width=APP_T_BTN_WIDTH, command=self.show_conjunction_table)
         self.btn[1].grid(sticky="")
 
-        self.btn[0] = SubFrame(self.frm_master, 6, 0, APP_MINSIZE_ROW, APP_MINSIZE_COL)
-        self.btn[1] = Button(self.btn[0], text="Verb Suffix", width=APP_T_BTN_WIDTH, command=self.show_verb_suffix_table)
-        self.btn[1].grid(sticky="")
+        #self.btn[0] = SubFrame(self.frm_master, 6, 0, APP_MINSIZE_ROW, APP_MINSIZE_COL)
+        #self.btn[1] = Button(self.btn[0], text="Verb Suffix", width=APP_T_BTN_WIDTH, command=self.show_verb_suffix_table)
+        #self.btn[1].grid(sticky="")
 
         #Blank frame, all it does is fill the middle cell of the row, this allows this row to define the columns nicely
         #SubFrame(self.frm_master, 1, 1, APP_MINSIZE_ROW, APP_MINSIZE_COL)
