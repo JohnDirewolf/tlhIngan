@@ -93,7 +93,7 @@ VP_FONT = "Courier"
 VP_FONT_SIZE = 12
 
 #Verb Suffix Type Table Contants
-VST_MINSIZE_COL = 6
+VST_MINSIZE_COL = 30
 VST_MINSIZE_ROW = 30 
 
 # Imperative Prefix Table Constants

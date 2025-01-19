@@ -15,21 +15,21 @@ def SubFrame(parent, row, column, height, width, columnspan=1):
     return frm
 
 def result_popup(parent, title, text):
-        parent.protocol("WM_DELETE_WINDOW", lambda: None)
-        popup = Toplevel(parent)
-        popup.title(title)
-        popup.transient(parent)
-        frm_popup = Frame(popup, relief=GROOVE, height=180, width=180, borderwidth=5)
-        frm_popup.grid(row=0, column=0, padx=10, pady=10)
-        lbl_result = Label(frm_popup, text=text, font=("Courier", 24), padx=5, pady=5)
-        lbl_result.grid(row=0, column=0, padx=10, pady=(10,5))
-        btn_close = Button(frm_popup, text="Close", font=("Courier", 24), padx=5, pady=5, command=popup.destroy, borderwidth=5)
-        btn_close.grid(row=1, column=0, padx=10, pady=(5, 10))
-        popup.update()
-        popup.grab_set_global()
-        popup.focus_force()
-        parent.wait_window(popup)
-        parent.protocol("WM_DELETE_WINDOW", parent.destroy)
+    parent.protocol("WM_DELETE_WINDOW", lambda: None)
+    popup = Toplevel(parent)
+    popup.title(title)
+    popup.transient(parent)
+    frm_popup = Frame(popup, relief=GROOVE, height=180, width=180, borderwidth=5)
+    frm_popup.grid(row=0, column=0, padx=10, pady=10)
+    lbl_result = Label(frm_popup, text=text, font=("Courier", 24), padx=5, pady=5)
+    lbl_result.grid(row=0, column=0, padx=10, pady=(10,5))
+    btn_close = Button(frm_popup, text="Close", font=("Courier", 24), padx=5, pady=5, command=popup.destroy, borderwidth=5)
+    btn_close.grid(row=1, column=0, padx=10, pady=(5, 10))
+    popup.update()
+    popup.grab_set_global()
+    popup.focus_force()
+    parent.wait_window(popup)
+    parent.protocol("WM_DELETE_WINDOW", parent.destroy)
 
 #----------- APP CLASS -----------
 class App():
@@ -737,7 +737,7 @@ class ConjunctionTable():
 class VerbTypeTable():
     def __init__(self, master):
         self.root = Toplevel(master)
-        self.height = (VST_MINSIZE_ROW*8)
+        self.height = (VST_MINSIZE_ROW*8 + 30)
         self.width = (VST_MINSIZE_COL*7 + 30)
         self.root.title("Verb Suffix Type Table!")
         self.root.geometry(f"{self.width}x{self.height}")
@@ -746,9 +746,11 @@ class VerbTypeTable():
         self.btn_show_key = [None, None]
         self.btn_clear = [None, None]
         self.btn_score_test = [None, None]
+        #Testing
+        self.txt_showverbs = [None, None]
         self.dict = database.get_affixes_type(VERB_SUFFIXES)
         self.setup_ui()  # Set up the specific UI elements
-        #self.set_answer_key()
+        #self.set_answer_key() 
 
     def setup_ui(self):   
         self.root.resizable(width=False, height=False)
@@ -756,3 +758,12 @@ class VerbTypeTable():
         #Master Frame - gives a nice outer ridge boarder.
         self.frm_master = Frame(self.root, relief=RIDGE, borderwidth=5)
         self.frm_master.grid(row=0, column=0, padx=10, pady=10)   
+
+        self.txt_showverbs[0] = SubFrame(self.frm_master, 0, 0, VST_MINSIZE_ROW*8, VST_MINSIZE_COL*7)
+        self.txt_showverbs[1] = Label(self.txt_showverbs[0], text="nuqneH qo'")
+        self.txt_showverbs[1].grid(sticky="")
+        temptext = ""
+        for i in range(0, len(self.dict)):
+            if self.dict[i][TYPE] == 1:
+                temptext = temptext + self.dict[i][KLINGON] + "\n"
+        self.txt_showverbs[1].config(text=temptext)
